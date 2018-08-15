@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "510890206158",
+    "firebase_url": "https://ucampus-89e65.firebaseio.com",
+    "project_id": "ucampus-89e65",
+    "storage_bucket": "ucampus-89e65.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:510890206158:android:41ad84569bfddb61",
+        "android_client_info": {
+          "package_name": "com.educocoUcampus"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "510890206158-6frplgs0obgub4o4fg2n65fk2gndgh76.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAJahcRA6i_I_nmJS2xcLpTPnWN11VdnWM"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
