@@ -1,6 +1,7 @@
 
 import React, { Component } from 'react';
 import { View, Text, Dimensions, Button, TouchableOpacity, Image } from 'react-native';
+import axios from 'axios';
 import { StackNavigator } from 'react-navigation';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import TitleBar from './tabDecorators/TitleBar';
@@ -42,7 +43,6 @@ const styles = {
 
 class LearningScreen extends Component{
     constructor(props){
-        
         super(props);
         // context is used on header's
         this.activityModules = [
@@ -52,7 +52,87 @@ class LearningScreen extends Component{
             {target: 'ClassRoom', routeName: 'ClassRoom', title: '寫作教室', icon: learningWrite, context: 'Award'},
             {target: 'MarkingEssay', routeName: 'MarkingEssay', title: '批改作文', icon: activityBooks},
             {target: 'WarmUp', routeName: 'WarmUp', title: '寫作練習', icon: learningWrite}
-        ]
+        ];
+        this.state={
+            theData: '',
+            title: '',
+            semantics: '',
+            score: ''
+        }
+
+    }
+    componentWillMount(){
+
+        fetch(('http://140.122.63.113/aces/titles.ashx'), {
+            method: 'GET'}).then((response) => {
+              if (response.status === 200) {
+      
+                response.json().then(json => {
+                                      this.setState(Object.assign({}, this.state, {'title': json.toString()}));
+                                    });
+              } else {
+                //console.log(response.status);
+              }
+            })
+            .catch((error) => {
+              //console.log(error);
+            });
+
+        let body = {
+            t: '可貴的合作經驗',
+            c: '可貴的合作經驗'
+            };
+        var formData = new FormData();
+        formData.append("t", "可貴的合作經驗");
+        formData.append("c", "可貴的合作經驗");
+        fetch(('http://140.122.63.113/aces/semacheck.ashx?').concat('c=').
+        concat("可貴的合作經驗").
+        concat('&').concat('t=').concat("可貴的合作經驗"), {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json' 
+              }
+        }).then((response) => {
+                if (response.status === 200) {
+        
+                response.text().then(text => {
+                                        this.setState(Object.assign({}, this.state, {'semantics': text}));
+                                    });
+                } else {
+                //console.log(response.status);
+                }
+            })
+            .catch((error) => {
+                //console.log(error);
+            });
+
+
+        //http://140.122.63.113/aces/score.ashx
+        
+        fetch(('http://140.122.63.113/aces/score.ashx?').concat('c=').
+        concat("可貴的合作經驗").
+        concat('&').concat('t=').concat("可貴的合作經驗"), {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json' 
+              },
+            body: formData,
+        }).then((response) => {
+                if (response.status === 200) {
+        
+                response.text().then(json => {
+                                        this.setState(Object.assign({}, this.state, {'score': json.toString()}));
+                                    });
+                } else {
+                //console.log(response.status);
+                }
+            })
+            .catch((error) => {
+                //console.log(error);
+            });
+        
 
     }
     //
@@ -90,7 +170,9 @@ class LearningScreen extends Component{
 
         return(
             <View style={{display: 'flex', flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-                <Text>尚未開放</Text>
+                <Text>score:{this.state.score}</Text>
+                <Text>fetch:{this.state.title}</Text>
+                <Text>semantics:{this.state.semantics}</Text>
             </View>
         );
     }
