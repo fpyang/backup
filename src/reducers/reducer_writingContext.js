@@ -8,7 +8,8 @@ export default function (state = defaultStatus, action) {
   if (action) {
     switch (action.type) {
       case SET_WRITING_CONTEXT:
-        return action.payload;
+              let context = {...state.context, ...action.payload.context}
+        return {...state, context: context};
       default:
         return state;
     }

@@ -34,7 +34,10 @@ class SubjectItem extends Component{
         let content = <Text>{this.props.questionTitle}</Text>;
         let currentWritingContext = {
             questionTitle: this.props.questionTitle, 
-            questionPrompt: this.props.questionPrompt
+            questionPrompt: this.props.questionPrompt,
+            initText: '',
+            content: '',
+            type: 'notSubmittedYet'
         }
         return(
             <TouchableOpacity 

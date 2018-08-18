@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, Dimensions, Button, TouchableOpacity } from 'react-native';
+import { View, Text, Dimensions, Button, TouchableOpacity, Keyboard } from 'react-native';
 import { StackNavigator } from 'react-navigation';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import TitleBar from './tabDecorators/TitleBar';
@@ -215,8 +215,7 @@ const LearningStackComponent = StackNavigator({
                         </View>
                     </TouchableOpacity>,
         headerLeft: <TouchableOpacity 
-                        onPress={() => navigation.navigate('LearningScreen')}
-                        >
+                        onPress={() => navigation.navigate('LearningScreen')}>
                         <View style={styles.headerLeft}>
                             <Icon 
                             name="angle-left" 
@@ -391,7 +390,9 @@ const LearningStackComponent = StackNavigator({
         tabBarVisible: false,
         headerRight: <WarmUpCompleteButton />,
         headerLeft: <TouchableOpacity 
-                        onPress={() => navigation.navigate(navigation.state.params.back)}
+                        onPress={() => {
+                            Keyboard.dismiss();
+                            navigation.navigate(navigation.state.params.back);}}
                         >
                         <View style={styles.headerLeft}>
                             <Icon 
@@ -648,10 +649,9 @@ const LearningStackComponent = StackNavigator({
     WarmUpCollection: { screen: WarmUpCollection,                 
         navigationOptions: ({ navigation }) => ({
         tabBarVisible: false,
-        headerRight: <View />,
+        headerRight: (<View></View>),
         headerLeft: <TouchableOpacity 
-                        onPress={() => navigation.navigate('WarmUp')}
-                        >
+                        onPress={() => navigation.navigate('WarmUp')}>
                         <View style={styles.headerLeft}>
                             <Icon 
                             name="angle-left" 
@@ -677,7 +677,6 @@ const LearningStackComponent = StackNavigator({
                    fontWeight: 'bold'
                }}
                onPress={() => {
-                   
                }}> 作品集 </Text></View>,
             headerStyle: { 
               height: 50,

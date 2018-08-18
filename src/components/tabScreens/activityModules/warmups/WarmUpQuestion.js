@@ -78,6 +78,7 @@ class WarmUpQuestion extends Component{
                     title: '寫作練習', 
                     questionTitle: this.props.writingContext.context.questionTitle,
                     questionPrompt: this.props.writingContext.context.questionPrompt,
+                    initText: '',
                     back: 'WarmUpQuestion'
                 })}}
                 >

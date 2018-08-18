@@ -63,14 +63,16 @@ class WarmUpTyping extends Component{
                 <Text style={styles.titleText}>題目: {this.props.writingContext.context.questionTitle}</Text>
             </View>
             <View style={{height: this.state.keyboardHeight}}>
-            <ScrollView  keyboardShouldPersistTaps='always'>
+            <ScrollView keyboardShouldPersistTaps='always'>
             <TextInput
                     underlineColorAndroid={'transparent'}
                     autoFocus = {true}
                     multiline = {true}
                     style={{height: '100%', width: '100%', backgroundColor: 'white', height:'100%', borderWidth: 0, marginBottom: 20}}
                     onChangeText={(text) => {
-                        this.setState({text});
+                        this.setState({workText: text});
+                        //change redux data, i.e. {writingContext} here
+                        this.props.setCurrentWritingContext({content: text});
                         this.setState({wordLength: text.length});
                     }
                     }
@@ -80,6 +82,7 @@ class WarmUpTyping extends Component{
             </View>
             <View style={styles.hintTextLayout}>
             <Text style={styles.hintText}>文章最少500字, 已輸入{this.state.wordLength}字</Text>
+            <Text>{JSON.stringify(this.props.writingContext)}</Text>
             </View>
             <ActionSheet
                 ref={o => this.ActionSheet = o}
@@ -87,7 +90,7 @@ class WarmUpTyping extends Component{
                 options={['Apple', 'Banana', 'cancel']}
                 cancelButtonIndex={2}
                 destructiveButtonIndex={1}
-                onPress={(index) => { /* do something */ }}
+                onPress={(index) => { }}
                 />
             </View>
         )

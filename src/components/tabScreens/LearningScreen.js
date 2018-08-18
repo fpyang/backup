@@ -24,7 +24,7 @@ const styles = {
         flex: 1,
         flexWrap: 'wrap',
         flexDirection: 'row',
-        alignItems: 'center',
+        //alignItems: 'center',
         backgroundColor: '#f2f2f2',
     },
     buttonContainer: {
@@ -45,12 +45,13 @@ class LearningScreen extends Component{
     constructor(props){
         super(props);
         // context is used on header's
+            
         this.activityModules = [
-            {target: 'Stars', routeName: 'Stars', title: '寫作新星', icon: learningStar},
-            {target: 'LevelUp', routeName: 'LevelUp', title: '閱讀練功坊', icon: learningRead},
-            {target: 'Poll', routeName: 'Poll', title: '校園民調', icon: learningPoll},
-            {target: 'ClassRoom', routeName: 'ClassRoom', title: '寫作教室', icon: learningWrite, context: 'Award'},
-            {target: 'MarkingEssay', routeName: 'MarkingEssay', title: '批改作文', icon: activityBooks},
+            //{target: 'Stars', routeName: 'Stars', title: '寫作新星', icon: learningStar},
+            //{target: 'LevelUp', routeName: 'LevelUp', title: '閱讀練功坊', icon: learningRead},
+            //{target: 'Poll', routeName: 'Poll', title: '校園民調', icon: learningPoll},
+            //{target: 'ClassRoom', routeName: 'ClassRoom', title: '寫作教室', icon: learningWrite, context: 'Award'},
+            //{target: 'MarkingEssay', routeName: 'MarkingEssay', title: '批改作文', icon: activityBooks},
             {target: 'WarmUp', routeName: 'WarmUp', title: '寫作練習', icon: learningWrite}
         ];
         this.state={
@@ -77,7 +78,12 @@ class LearningScreen extends Component{
             .catch((error) => {
               //console.log(error);
             });
-
+        /*
+        headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json' 
+              }
+        */
         let body = {
             t: '可貴的合作經驗',
             c: '可貴的合作經驗'
@@ -88,14 +94,9 @@ class LearningScreen extends Component{
         fetch(('http://140.122.63.113/aces/semacheck.ashx?').concat('c=').
         concat("可貴的合作經驗").
         concat('&').concat('t=').concat("可貴的合作經驗"), {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json' 
-              }
+            method: 'POST',           
         }).then((response) => {
-                if (response.status === 200) {
-        
+                if (response.status === 200) {       
                 response.text().then(text => {
                                         this.setState(Object.assign({}, this.state, {'semantics': text}));
                                     });
@@ -114,10 +115,6 @@ class LearningScreen extends Component{
         concat("可貴的合作經驗").
         concat('&').concat('t=').concat("可貴的合作經驗"), {
             method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json' 
-              },
             body: formData,
         }).then((response) => {
                 if (response.status === 200) {
@@ -137,7 +134,7 @@ class LearningScreen extends Component{
     }
     //
     render(){
-        /*
+        
         return(
         <View style={{flex: 1}}>
             <View style={styles.content}>
@@ -166,7 +163,7 @@ class LearningScreen extends Component{
               )}
             </View>
         </View>);
-        */
+        /*
 
         return(
             <View style={{display: 'flex', flex: 1, justifyContent: 'center', alignItems: 'center'}}>
@@ -175,6 +172,8 @@ class LearningScreen extends Component{
                 <Text>semantics:{this.state.semantics}</Text>
             </View>
         );
+
+        */
     }
 }
 
