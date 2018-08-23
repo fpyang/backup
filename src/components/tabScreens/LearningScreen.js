@@ -63,7 +63,7 @@ class LearningScreen extends Component{
 
     }
     componentWillMount(){
-
+        
         fetch(('http://140.122.63.113/aces/titles.ashx'), {
             method: 'GET'}).then((response) => {
               if (response.status === 200) {
@@ -83,7 +83,14 @@ class LearningScreen extends Component{
                 'Accept': 'application/json',
                 'Content-Type': 'application/json' 
               }
-        */
+              
+              .concat('t=').
+        concat("可貴的合作經驗").
+        concat('&').concat('c=').concat("可貴的合作經驗")
+              
+              */
+        
+        
         let body = {
             t: '可貴的合作經驗',
             c: '可貴的合作經驗'
@@ -91,14 +98,16 @@ class LearningScreen extends Component{
         var formData = new FormData();
         formData.append("t", "可貴的合作經驗");
         formData.append("c", "可貴的合作經驗");
-        fetch(('http://140.122.63.113/aces/semacheck.ashx?').concat('c=').
+        /*
+        fetch(('http://140.122.63.113/aces/semacheck.ashx')
+        .concat('t=').
         concat("可貴的合作經驗").
-        concat('&').concat('t=').concat("可貴的合作經驗"), {
+        concat('&').concat('c=').concat("可貴的合作經驗"), {
             method: 'POST',           
         }).then((response) => {
                 if (response.status === 200) {       
                 response.text().then(text => {
-                                        this.setState(Object.assign({}, this.state, {'semantics': text}));
+                                        this.setState(Object.assign({}, this.state, {'w': text}));
                                     });
                 } else {
                 //console.log(response.status);
@@ -106,21 +115,21 @@ class LearningScreen extends Component{
             })
             .catch((error) => {
                 //console.log(error);
-            });
+            });*/
 
-
-        //http://140.122.63.113/aces/score.ashx
         
-        fetch(('http://140.122.63.113/aces/score.ashx?').concat('c=').
-        concat("可貴的合作經驗").
-        concat('&').concat('t=').concat("可貴的合作經驗"), {
+        //http://140.122.63.113/aces/score.ashx
+
+        /*
+        
+        fetch(('http://140.122.63.113/aces/score.ashx'), {
             method: 'POST',
             body: formData,
         }).then((response) => {
                 if (response.status === 200) {
         
-                response.text().then(json => {
-                                        this.setState(Object.assign({}, this.state, {'score': json.toString()}));
+                response.json().then(json => {
+                                        this.setState(Object.assign({}, this.state, {'score': JSON.stringify(json)}));
                                     });
                 } else {
                 //console.log(response.status);
@@ -129,10 +138,28 @@ class LearningScreen extends Component{
             .catch((error) => {
                 //console.log(error);
             });
-        
 
+
+            fetch(('http://140.122.63.113/aces/semacheck.ashx'), {
+                method: 'POST',
+                body: formData, //JSON.stringify(body),
+            }).then((response) => {
+                    if (response.status === 200) {
+            
+                    response.text().then(json => {
+                                            this.setState(Object.assign({}, this.state, {'semantics': json.toString()}));
+                                        });
+                    } else {
+                    //console.log(response.status);
+                    }
+                })
+                .catch((error) => {
+                    //console.log(error);
+                });
+        
+        */
     }
-    //
+    
     render(){
         
         return(
@@ -163,17 +190,19 @@ class LearningScreen extends Component{
               )}
             </View>
         </View>);
+        
+        
         /*
-
         return(
             <View style={{display: 'flex', flex: 1, justifyContent: 'center', alignItems: 'center'}}>
                 <Text>score:{this.state.score}</Text>
                 <Text>fetch:{this.state.title}</Text>
                 <Text>semantics:{this.state.semantics}</Text>
             </View>
-        );
+        );*/
 
-        */
+
+        
     }
 }
 

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, ScrollView } from 'react-native';
 import firebase from 'react-native-firebase';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -74,13 +74,13 @@ class WarmUpCollection extends Component{
 
             }
         ]
-        return(<View style={styles.page}>
+        return(<ScrollView style={styles.page}>
             {this.state.warmUps.map(
                     (value, index)=>{  
                             return(<WorkItem key={index} {...value} {...this.props} back='WarmUpCollection'/>);
                     }
                 )}
-            </View>
+            </ScrollView>
         )
     }
 }

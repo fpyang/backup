@@ -388,7 +388,7 @@ const LearningStackComponent = StackNavigator({
     WarmUpTyping: { screen: WarmUpTyping,                 
         navigationOptions: ({ navigation }) => ({
         tabBarVisible: false,
-        headerRight: <WarmUpCompleteButton />,
+        headerRight: <WarmUpCompleteButton navigation={navigation}/>,
         headerLeft: <TouchableOpacity 
                         onPress={() => {
                             Keyboard.dismiss();

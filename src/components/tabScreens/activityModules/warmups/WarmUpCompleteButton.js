@@ -43,10 +43,18 @@ class WarmUpCompleteButton extends Component{
                           //1. get the relevance between content and topic
                           //2. get the score 
                           //3. submit with type masterpiece
-                          fetch(('http://140.122.63.113/aces/semacheck.ashx?').concat('c=').
+                          /*
+                          .concat('t=').
                             concat(this.props.writingContext.questionTitle).
-                            concat('&').concat('t=').concat(this.props.writingContext.content), {
-                                method: 'POST',           
+                            concat('&').concat('c=').concat(this.props.writingContext.content)
+                          */
+                         var formData = new FormData();
+                         formData.append("t", this.props.writingContext.questionTitle);
+                         formData.append("c", this.props.writingContext.content);
+
+                          fetch(('http://140.122.63.113/aces/semacheck.ashx'), {
+                                method: 'POST',
+                                body: formData,           
                             }).then((response) => {
                                     if (response.status === 200) {       
                                     response.text().then(text => {
@@ -57,13 +65,9 @@ class WarmUpCompleteButton extends Component{
                                                                     [
                                                                       {text: '確定', onPress: () => {
 
-                                                                        var formData = new FormData();
-                                                                        formData.append("t", this.props.writingContext.questionTitle);
-                                                                        formData.append("c", this.props.writingContext.content);
+                                                                        
 
-                                                                        fetch(('http://140.122.63.113/aces/score.ashx?').concat('c=').
-                                                                            concat(this.props.writingContext.questionTitle).
-                                                                            concat('&').concat('t=').concat(this.props.writingContext.content), {
+                                                                        fetch(('http://140.122.63.113/aces/score.ashx'), {
                                                                                 method: 'POST',
                                                                                 body: formData,
                                                                             }).then((response) => {
@@ -75,16 +79,20 @@ class WarmUpCompleteButton extends Component{
 
                                                                                                             ()=>{
 
-                                                                                                                if (this.props.writingContext == 'notSubmittedYet'){
+                                                                                                                if (this.props.writingContext.type == 'notSubmittedYet'){
                                                                                                                     //add a doc to Cloud FireStore
                                                                                                                     this.warmupCollection.add({
                                                                                                                         title: this.props.writingContext.questionTitle,
-                                                                                                                        content: c,
+                                                                                                                        content: this.props.writingContext.content,
                                                                                                                         type: 'masterpiece',
                                                                                                                         startTime: new Date(),
                                                                                                                         endTime: new Date(),
                                                                                                                         score: this.props.writingContext.score
-                                                                                                                    });
+                                                                                                                    }).then(
+                                                                                                                        ()=>{
+                                                                                                                            this.props.navigation.navigate('WarmUpCollection');
+                                                                                                                        }
+                                                                                                                    );
                                                                                                                   }else{
                                                                                                                     //over-write a doc 
                                                                                                                     this.warmupCollection.doc(this.props.writingContext.id).set({
@@ -94,7 +102,11 @@ class WarmUpCompleteButton extends Component{
                                                                                                                         startTime: this.props.writingContext.startTime, 
                                                                                                                         endTime: new Date(),
                                                                                                                         score: this.props.writingContext.score
-                                                                                                                        });
+                                                                                                                        }).then(
+                                                                                                                            ()=>{
+                                                                                                                                this.props.navigation.navigate('WarmUpCollection');
+                                                                                                                            }
+                                                                                                                        );
                                                                                                                   }
                                                                                                             }
                                                                                                             
@@ -116,32 +128,76 @@ class WarmUpCompleteButton extends Component{
                                                                     { cancelable: false }
                                                                   )
                                                             }else{
+                                                                Alert.alert(
+                                                                    '你的作文好像有寫到跟題目有關係的內容，建議你再看一看自己的作文!',
+                                                                    '你確定立即將作文送出評分?',
+                                                                    [
+                                                                      {text: '確定', onPress: () => {
 
-                                                                //相關性高不需要詢問?
+                                                                        /*
+                                                                        fetch(('http://140.122.63.113/aces/score.ashx?').concat('t=').
+                                                                            concat(this.props.writingContext.questionTitle).
+                                                                            concat('&').concat('c=').concat(this.props.writingContext.content), {*/
+                                                                                fetch(('http://140.122.63.113/aces/score.ashx'), {
+                                                                                method: 'POST',
+                                                                                body: formData,
+                                                                            }).then((response) => {
+                                                                                    if (response.status === 200) {
+                                                                            
+                                                                                    response.json().then(json => {
+                                                                                                            this.props.setCurrentWritingContext({score: json});
+                                                                                                        }).then(
 
-                                                                if (this.props.writingContext == 'notSubmittedYet'){
-                                                                    //add a doc to Cloud FireStore
-                                                                    this.warmupCollection.add({
-                                                                        title: this.props.writingContext.questionTitle,
-                                                                        content: c,
-                                                                        type: 'masterpiece',
-                                                                        startTime: new Date(),
-                                                                        endTime: new Date(),
-                                                                        score: {}
-                                                                    });
-                                                                  }else{
-                                                                    //over-write a doc 
-                                                                    this.warmupCollection.doc(this.props.writingContext.id).set({
-                                                                        title: this.props.writingContext.questionTitle,
-                                                                        content: this.props.writingContext.content,
-                                                                        type: 'masterpiece',
-                                                                        startTime: this.props.writingContext.startTime, 
-                                                                        endTime: new Date(),
-                                                                        score: {}
-                                                                        });
-                                                                  }
+                                                                                                            ()=>{
+
+                                                                                                                if (this.props.writingContext.type == 'notSubmittedYet'){
+                                                                                                                    //add a doc to Cloud FireStore
+                                                                                                                    this.warmupCollection.add({
+                                                                                                                        title: this.props.writingContext.questionTitle,
+                                                                                                                        content: this.props.writingContext.content,
+                                                                                                                        type: 'masterpiece',
+                                                                                                                        startTime: new Date(),
+                                                                                                                        endTime: new Date(),
+                                                                                                                        score: this.props.writingContext.score
+                                                                                                                    }).then(
+                                                                                                                        ()=>{
+                                                                                                                            this.props.navigation.navigate('WarmUpCollection');
+                                                                                                                        }
+                                                                                                                    );
+                                                                                                                  }else{
+                                                                                                                    //over-write a doc 
+                                                                                                                    this.warmupCollection.doc(this.props.writingContext.id).set({
+                                                                                                                        title: this.props.writingContext.questionTitle,
+                                                                                                                        content: this.props.writingContext.content,
+                                                                                                                        type: 'masterpiece',
+                                                                                                                        startTime: this.props.writingContext.startTime, 
+                                                                                                                        endTime: new Date(),
+                                                                                                                        score: this.props.writingContext.score
+                                                                                                                        }).then(
+                                                                                                                            ()=>{
+                                                                                                                                this.props.navigation.navigate('WarmUpCollection');
+                                                                                                                            }
+                                                                                                                        );
+                                                                                                                  }
+                                                                                                            }
+                                                                                                            
+                                                                                                        );
+                                                                                    } else {
+                                                                                    //console.log(response.status);
+                                                                                    }
+                                                                                })
+                                                                                .catch((error) => {
+                                                                                    //console.log(error);
+                                                                                });
+
+                                                                        
 
 
+                                                                      }},
+                                                                      {text: '取消', onPress: () => {}}
+                                                                    ],
+                                                                    { cancelable: false }
+                                                                  )
 
                                                             }
                                                         });
@@ -156,16 +212,20 @@ class WarmUpCompleteButton extends Component{
                           break;
                           case 1:
                           //submit with type draft
-                          if (this.warmupCollection.writingContext == 'notSubmittedYet'){
+                          if (this.props.writingContext.type == 'notSubmittedYet'){
                             //add a doc to Cloud FireStore
-                            this.todos.add({
+                            this.warmupCollection.add({
                                 title: this.props.writingContext.questionTitle,
                                 content: this.props.writingContext.content,
                                 type: 'draft',
                                 startTime: new Date(),
                                 endTime: new Date(),
                                 score: {}
-                            });
+                            }).then(
+                                ()=>{
+                                    this.props.navigation.navigate('WarmUpCollection');
+                                }
+                            );
                           }else{
                              //over-write a doc 
                             this.warmupCollection.doc(this.props.writingContext.id).set({
@@ -175,7 +235,11 @@ class WarmUpCompleteButton extends Component{
                                 startTime: this.props.writingContext.startTime,
                                 endTime: new Date(),
                                 score: {}
-                                });   
+                                }).then(
+                                    ()=>{
+                                        this.props.navigation.navigate('WarmUpCollection');
+                                    }
+                                );   
                           }
                           break;
                           case 2:

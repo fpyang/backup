@@ -127,8 +127,11 @@ class WorkItem extends Component{
             questionTitle: this.props.questionTitle, 
             questionPrompt: 'questionPrompt',
             initText: this.props.initText,
+            content: this.props.content,
             id: this.props.id,
             type: this.props.type,
+            startTime: this.props.startTime, 
+            endTime: this.props.endTime,
             score: {}
         }
         
@@ -147,7 +150,8 @@ class WorkItem extends Component{
                         }else{
                             Promise.all(
                             this.props.setCurrentWritingContext({score: this.props.scoreDetail, 
-                                title: this.props.title, content: this.props.content})
+                                title: this.props.title, content: this.props.content, 
+                                startTime: this.props.startTime, endTime: this.props.endTime})
                             ).then(
                             this.props.navigation.navigate('WarmUpScore', { 
                                 title: this.props.title, 

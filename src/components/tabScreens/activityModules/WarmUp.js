@@ -76,10 +76,10 @@ class WarmUp extends Component{
                 
                 {this.state.titles.map((value, index)=>{
                    let config = {
-                    title: value, 
+                    title: value.title, 
                     back: 'WarmUp',
-                    questionTitle: value,
-                    questionPrompt: '寫作小幫手3: \n\n求學至今，你遇過許多不同的老師，如果請你當一天的老師，你會做些什麼？是在家政課上，安排學生服裝表演？還是帶領學生進行戶外教學？或者整天都面帶微笑，不責備學生？……請寫出你的想法與做法。',
+                    questionTitle: value.title,
+                    questionPrompt: value.hint,
                     pageUrl: 'https://www.google.com'
                     }
                    return (<SubjectItem {...this.props} {...config}/>);

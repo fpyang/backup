@@ -36,11 +36,15 @@ const styles = {
         width: '100%',
         backgroundColor: '#F1F1F1',
         justifyContent: 'center',
-        marginTop: 6,
-        marginBottom: 6
+        marginTop: 8,
+        marginBottom: 8
     },
     descLineText: {
         color: 'gray'
+    },
+    titleFont: {
+        fontSize: 16,
+        color: 'black'
     }
 }
 class WarmUpScore extends Component{
@@ -58,11 +62,11 @@ class WarmUpScore extends Component{
             <View style={styles.sepLine} />
             <ScrollView>
             <Text style={styles.textTitle}>
-                文章標題 {'\n'}
+                 {'\n'}
             </Text>
-            <Text>{this.props.writingContext.title}</Text>
+            <Text style={styles.titleFont}>題目: {this.props.writingContext.title}</Text>
             <Text>
-                文章內容 {'\n'}
+                {'\n'}
             </Text>
             <Text>{this.props.writingContext.content}</Text>
             </ScrollView>
@@ -78,11 +82,11 @@ class WarmUpScore extends Component{
             {(this.props.selectedLevel==5)&&<Text>{this.props.writingContext.score.F4C}</Text>}
             <View style={styles.sepLine} />
             <Text style={styles.textTitle}>
-                文章標題
+                {'\n'}
             </Text>
-            <Text>{this.props.writingContext.title}</Text>
+            <Text style={styles.titleFont}>{this.props.writingContext.title}</Text>
             <Text>
-                文章內容 
+                {'\n'}
             </Text>
             <Text>{this.props.writingContext.content}</Text>
             </ScrollView>
