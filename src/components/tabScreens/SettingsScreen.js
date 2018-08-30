@@ -7,6 +7,7 @@ import { bindActionCreators } from 'redux';
 import { signOut, saveCurrentProfile, setAppStage, setRegStage } from '../../actions/index';
 import TitleBar from './tabDecorators/TitleBar';
 import RegItem from './registerModules/RegItem';
+import LLTextInput from './activityModules/utilities/LLTextInput';
 
 const styles = {
     page: {
@@ -146,6 +147,7 @@ class SettingsScreen extends Component{
     }*/
 
     syncCurrentUserProfile(fun){
+        
         this.setState({
             name: this.props.signIn.user.name,
             schoolCity: this.props.signIn.user.schoolCity,
@@ -155,6 +157,8 @@ class SettingsScreen extends Component{
             email: this.props.signIn.user.email,
             phoneNumber: this.props.signIn.user.phoneNumber
         }, ()=>{ fun()
+            
+            
             /*
             this.users.where("uid", "==", this.props.signIn.user.uid).get()
             .then(querySnapshot => {
@@ -446,7 +450,7 @@ class SettingsScreen extends Component{
         return data;
     }
     /*
-    <TextInput
+    <LLTextInput
                 underlineColorAndroid={'transparent'}
                 style={{height: 50, width: '100%', backgroundColor: 'white'}}
                 onChangeText={(text) => this.setState({text})}
@@ -503,7 +507,7 @@ class SettingsScreen extends Component{
         alertDialog = true; 
        }   
        if(alertDialog){
-        Alert.alert(
+        /*Alert.alert(
             '資料缺漏',
             errorMsg,
             [
@@ -512,7 +516,7 @@ class SettingsScreen extends Component{
             }},
             ],
             { cancelable: false }
-        );
+        );*/
        }else{
            //Update here
 
@@ -573,7 +577,7 @@ class SettingsScreen extends Component{
                                         <Text style={styles.textInputHeaderFont}>{'姓名'}</Text>
                                     </View>
                                     <View>        
-                                    <TextInput
+                                    <LLTextInput
                                             style={{height: 40, borderColor: 'gray', borderWidth: 1}}
                                             placeholder={''}
                                             underlineColorAndroid={'transparent'}
@@ -668,6 +672,7 @@ class SettingsScreen extends Component{
                                 cancelText="取消"
                                 onModalOpen={
                                     ()=>{
+                                        
                                         /*
                                         if(this.props.signIn.user.name == ''){
                                             this.syncCurrentUserProfile(()=>{});
@@ -701,6 +706,7 @@ class SettingsScreen extends Component{
                                 onModalOpen={
                                     
                                     ()=>{
+                                        this.setCurrentSchoolType(this.props.signIn.user.schoolType);
                                         /*
                                         if(this.props.signIn.user.schoolCity == ''){
                                             this.syncCurrentUserProfile(()=>{});
@@ -726,6 +732,7 @@ class SettingsScreen extends Component{
                                 onModalOpen={
                                     
                                     ()=>{
+                                        this.setCurrentSchoolsList(this.props.signIn.user.schoolType, this.props.signIn.user.schoolCity);
                                         /*
                                         if(this.props.signIn.user.name == ''){
                                             this.syncCurrentUserProfile(()=>{});
@@ -752,7 +759,7 @@ class SettingsScreen extends Component{
                                         <Text style={styles.textInputHeaderFont}>{'電子郵件'}</Text>
                                     </View>
                                     <View>        
-                                    <TextInput
+                                    <LLTextInput
                                             style={{height: 40, borderColor: 'gray', borderWidth: 1}}
                                             placeholder={''}
                                             underlineColorAndroid={'transparent'}
@@ -815,7 +822,7 @@ class SettingsScreen extends Component{
                                         <Text style={styles.textInputHeaderFont}>{'入場證'}</Text>
                                     </View>
                                     <View>        
-                                    <TextInput
+                                    <LLTextInput
                                             style={{height: 40, borderColor: 'gray', borderWidth: 1}}
                                             placeholder={''}
                                             underlineColorAndroid={'transparent'}
@@ -930,7 +937,7 @@ class SettingsScreen extends Component{
                                         <Text style={styles.textInputHeaderFont}>{'班級代碼'}</Text>
                                     </View>
                                     <View>        
-                                    <TextInput
+                                    <LLTextInput
                                             style={{height: 40, borderColor: 'gray', borderWidth: 1}}
                                             placeholder={''}
                                             defaultValue={''}

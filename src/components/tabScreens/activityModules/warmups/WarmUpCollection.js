@@ -15,7 +15,7 @@ class WarmUpCollection extends Component{
     constructor(props){
         super(props);
         this.warmupCollection = firebase.firestore().collection('aiwriting/'.concat(this.props.signIn.user.uid)
-        .concat('/collection'));
+        .concat('/collection')).orderBy('endTime');
         this.onWarmupCollectionUpdate = this.onWarmupCollectionUpdate.bind(this);
         this.state = {
             warmUps: []

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { ScrollView, View, Text, TouchableOpacity, Dimensions, Image, Alert } from 'react-native';
+import { ScrollView, View, Text, TouchableOpacity, TouchableHighlight, Dimensions, Image, Alert, Modal } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import RadioForm, {RadioButton, RadioButtonInput, RadioButtonLabel} from 'react-native-simple-radio-button';
 import ModalSelector from 'react-native-modal-selector';
@@ -8,11 +8,13 @@ import firebase from 'react-native-firebase';
 import ActionSheet from 'react-native-actionsheet';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import AutoHeightImage from 'react-native-auto-height-image';
 import { saveCurrentProfile } from '../../../../actions/index';
 
 const {height,width}=Dimensions.get('window');
 const imageSize = width/3.5;
 const itemSize = 70;
+const headerFontColor = '#2D82C6';
 const styles = {
     submit: {
         flex: 1,
@@ -31,7 +33,7 @@ const styles = {
         height: imageSize,
         width: imageSize,
         backgroundColor: 'white',
-        margin: 8,
+        margin: 5,
         resizeMode: 'contain'
     },
     imageGroup: {
@@ -96,6 +98,15 @@ const styles = {
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: 'gray'
+    },
+    headerText: {
+        fontSize: 18,
+        color: headerFontColor
+    },
+    headerLeft: {
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center'      
     }
 }
 
@@ -143,7 +154,9 @@ class Submit extends Component{
             draftStatus: null,
             initAgreement: -1,
             documentId: null,
-            value3Index: null
+            value3Index: null,
+            modalVisible: false
+
         }
         this.onTitleClickHandler = this.onTitleClickHandler.bind(this);
         this.onGroupClickHandler = this.onGroupClickHandler.bind(this);
@@ -159,6 +172,8 @@ class Submit extends Component{
         this.haveSubmited = this.haveSubmited.bind(this);
         this.renderSubmittedPage = this.renderSubmittedPage.bind(this);
         this.renderDraftPage = this.renderDraftPage.bind(this);
+        this.setModalVisible = this.setModalVisible.bind(this);
+        this.renderBigImage = this.renderBigImage.bind(this);
         this.haveSubmited();    
     }
     componentDidMount() {
@@ -171,6 +186,9 @@ class Submit extends Component{
     onTitleClickHandler(){
     }
     onGroupClickHandler(){
+    }
+    setModalVisible(visible) {
+        this.setState({modalVisible: visible});
     }
     uploadImageFromCamera(){
 
@@ -228,6 +246,10 @@ class Submit extends Component{
     
     renderImage(image) {
         return <Image style={styles.imageUploaded} source={image} />
+    }
+
+    renderBigImage(image) {
+        return <AutoHeightImage width={width} source={image} />
     }
 
     checkCompleteness(){
@@ -473,13 +495,43 @@ class Submit extends Component{
             <ScrollView contentContainerStyle={styles.submit}>
             <TouchableOpacity 
             style={styles.imageGroupContainer}
-            onPress={()=>{return 1}}
+            onPress={()=>{this.setModalVisible(true)}}
             >
                 <View style={styles.imageGroup}>
                 {this.state.image ? this.renderImage(this.state.image) : <View style={styles.image}></View>}
                     <Text style={styles.imageLabel}></Text>
                 </View>
             </TouchableOpacity>
+            <Modal
+                animationType="slide"
+                transparent={false}
+                visible={this.state.modalVisible}
+                onRequestClose={() => {
+                    alert('Modal has been closed.');
+                }}>
+                <View style={{marginTop: 22}}>
+                    <View>
+                    <TouchableHighlight
+                        onPress={() => {
+                        this.setModalVisible(!this.state.modalVisible);
+                        }}>
+                        <View style={styles.headerLeft}>
+                            <Icon 
+                            name="angle-left" 
+                            size={30} 
+                            style={{marginRight: 5, marginLeft: 5}}
+                            color={headerFontColor}>
+                            </Icon>
+                            <Text style={styles.headerText}>返回</Text>
+                        </View>
+                    </TouchableHighlight>
+                    <ScrollView style={{marginTop: 10}}>
+                    {this.state.image ? this.renderBigImage(this.state.image) : <View style={styles.image}></View>}
+                    </ScrollView>
+                    
+                    </View>
+                </View>
+            </Modal>
 
             <View style={styles.SubmitFieldItem}>
                 <View style={styles.SubmitFieldTitleFixedWidth}>

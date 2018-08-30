@@ -5,6 +5,7 @@ import { bindActionCreators } from 'redux';
 import firebase from 'react-native-firebase';
 import ModalSelector from 'react-native-modal-selector';
 import { setAppStage, saveCurrentProfile } from '../../../actions/index';
+import LLTextInput from '../activityModules/utilities/LLTextInput';
 import RegItem from './RegItem';
 
 const identationLeft = 20;
@@ -437,6 +438,10 @@ class UserProfile extends Component{
         */
         return data;
     }
+    /*
+    
+                autoCapitalize={'none'}
+    */
     render(){
         let index = 0;
         return (
@@ -446,17 +451,18 @@ class UserProfile extends Component{
                 學生姓名 ＊若要查詢聯合盃成績請務必填寫真實姓名
                 </Text>
             </View>
-            <TextInput
+            <View>
+            <LLTextInput
+                autoCorrect={false}
                 underlineColorAndroid={'transparent'}
                 style={{height: 50, width: '100%', backgroundColor: 'white'}}
                 onChangeText={(text) => this.setState({text})}
-                underlineColorAndroid='rgba(0,0,0,0)'
-                autoCorrect={false}
-                autoCapitalize={'none'}
                 placeholder={initName}
                 maxLength={10}
-                value={'' + this.state.text}
+                onEndEditing={()=>{}}
+                value={this.state.text}
             />
+            </View>
             <View style={{height: 50, justifyContent: 'flex-end', padding: 5}}>
                 <Text>
                 學校資訊
@@ -519,7 +525,7 @@ class UserProfile extends Component{
                             <Text style={styles.textInputHeaderFont}>{initEmail}</Text>
                         </View>
                         <View>        
-                        <TextInput
+                        <LLTextInput
                                 style={{height: 40, borderColor: 'gray', borderWidth: 1}}
                                 placeholder={initEmail}
                                 underlineColorAndroid={'transparent'}
@@ -571,7 +577,7 @@ class UserProfile extends Component{
                             <Text style={styles.textInputHeaderFont}>{initAdmission}</Text>
                         </View>
                         <View>        
-                        <TextInput
+                        <LLTextInput
                                 style={{height: 40, borderColor: 'gray', borderWidth: 1}}
                                 placeholder={initAdmission}
                                 underlineColorAndroid={'transparent'}
@@ -726,7 +732,7 @@ class UserProfile extends Component{
                             <Text style={styles.textInputHeaderFont}>{initClassCode}</Text>
                         </View>
                         <View>        
-                        <TextInput
+                <LLTextInput
                                 style={{height: 40, borderColor: 'gray', borderWidth: 1}}
                                 placeholder={initClassCode}
                                 defaultValue={''}

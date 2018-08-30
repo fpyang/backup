@@ -90,7 +90,10 @@ class WarmUpCompleteButton extends Component{
                                                                                                                         score: this.props.writingContext.score
                                                                                                                     }).then(
                                                                                                                         ()=>{
-                                                                                                                            this.props.navigation.navigate('WarmUpCollection');
+                                                                                                                            this.props.navigation.navigate('WarmUpScore', { 
+                                                                                                                                title: this.props.writingContext.questionTitle, 
+                                                                                                                                back: 'WarmUp'
+                                                                                                                                });
                                                                                                                         }
                                                                                                                     );
                                                                                                                   }else{
@@ -104,7 +107,10 @@ class WarmUpCompleteButton extends Component{
                                                                                                                         score: this.props.writingContext.score
                                                                                                                         }).then(
                                                                                                                             ()=>{
-                                                                                                                                this.props.navigation.navigate('WarmUpCollection');
+                                                                                                                                this.props.navigation.navigate('WarmUpScore', { 
+                                                                                                                                    title: this.props.writingContext.questionTitle, 
+                                                                                                                                    back: 'WarmUp'
+                                                                                                                                    });
                                                                                                                             }
                                                                                                                         );
                                                                                                                   }
@@ -129,7 +135,7 @@ class WarmUpCompleteButton extends Component{
                                                                   )
                                                             }else{
                                                                 Alert.alert(
-                                                                    '你的作文好像有寫到跟題目有關係的內容，建議你再看一看自己的作文!',
+                                                                    '',
                                                                     '你確定立即將作文送出評分?',
                                                                     [
                                                                       {text: '確定', onPress: () => {
@@ -161,7 +167,10 @@ class WarmUpCompleteButton extends Component{
                                                                                                                         score: this.props.writingContext.score
                                                                                                                     }).then(
                                                                                                                         ()=>{
-                                                                                                                            this.props.navigation.navigate('WarmUpCollection');
+                                                                                                                            this.props.navigation.navigate('WarmUpScore', { 
+                                                                                                                                title: this.props.writingContext.questionTitle, 
+                                                                                                                                back: 'WarmUp'
+                                                                                                                                });
                                                                                                                         }
                                                                                                                     );
                                                                                                                   }else{
@@ -175,7 +184,10 @@ class WarmUpCompleteButton extends Component{
                                                                                                                         score: this.props.writingContext.score
                                                                                                                         }).then(
                                                                                                                             ()=>{
-                                                                                                                                this.props.navigation.navigate('WarmUpCollection');
+                                                                                                                                this.props.navigation.navigate('WarmUpScore', { 
+                                                                                                                                    title: this.props.writingContext.questionTitle, 
+                                                                                                                                    back: 'WarmUp'
+                                                                                                                                    });
                                                                                                                             }
                                                                                                                         );
                                                                                                                   }

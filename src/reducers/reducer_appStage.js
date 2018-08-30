@@ -8,7 +8,7 @@ import { SET_APP_STAGE } from '../actions';
   
 */
 const defaultStatus = {
-    appStage: 'Registering'
+    appStage: 'OnBoarding'
   };
 
 export default function (state = defaultStatus, action) {

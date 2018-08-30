@@ -15,7 +15,7 @@ const styles = {
     },
     scoreDescription: {
         flex: 2,
-        padding: 10,
+        padding: 0,
         backgroundColor: 'white'
     },
     textTitle: {
@@ -36,7 +36,7 @@ const styles = {
         width: '100%',
         backgroundColor: '#F1F1F1',
         justifyContent: 'center',
-        marginTop: 8,
+        marginTop: 0,
         marginBottom: 8
     },
     descLineText: {
@@ -45,6 +45,9 @@ const styles = {
     titleFont: {
         fontSize: 16,
         color: 'black'
+    },
+    scoreTextArea: {
+        padding: 8
     }
 }
 class WarmUpScore extends Component{
@@ -59,7 +62,7 @@ class WarmUpScore extends Component{
     }
     renderOverview(){
         return(<View style={styles.scoreDescription}>
-            <View style={styles.sepLine} />
+            <View style={styles.descLine} />
             <ScrollView>
             <Text style={styles.textTitle}>
                  {'\n'}
@@ -75,12 +78,15 @@ class WarmUpScore extends Component{
     renderScoreDescription(){
         return(<View style={styles.scoreDescription}>
             <ScrollView>
-            <View style={styles.descLine}><Text style={styles.descLineText}>{'評分結果'}</Text></View>
+            <View style={styles.descLine}><Text style={styles.descLineText}>{'  評分結果'}</Text></View>
+            <View style={styles.scoreTextArea}>
             {(this.props.selectedLevel==2)&&<Text>{this.props.writingContext.score.F1C}</Text>}
             {(this.props.selectedLevel==3)&&<Text>{this.props.writingContext.score.F2C}</Text>}
             {(this.props.selectedLevel==4)&&<Text>{this.props.writingContext.score.F3C}</Text>}
             {(this.props.selectedLevel==5)&&<Text>{this.props.writingContext.score.F4C}</Text>}
+            </View>
             <View style={styles.sepLine} />
+            <View style={styles.scoreTextArea}>
             <Text style={styles.textTitle}>
                 {'\n'}
             </Text>
@@ -89,6 +95,7 @@ class WarmUpScore extends Component{
                 {'\n'}
             </Text>
             <Text>{this.props.writingContext.content}</Text>
+            </View>
             </ScrollView>
             </View>);
     }

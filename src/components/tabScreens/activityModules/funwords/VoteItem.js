@@ -1,10 +1,13 @@
 import React, { Component } from 'react';
-import { View, Text, Dimensions, Image, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, Dimensions, Image, TouchableOpacity, Alert, ScrollView, Modal, TouchableHighlight } from 'react-native';
 import firebase from 'react-native-firebase';
 import { connect } from 'react-redux';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import AutoHeightImage from 'react-native-auto-height-image';
 
 const { height, width } = Dimensions.get('window');
 const cardWidth = width/2-12;
+const headerFontColor = '#2D82C6';
 const styles = {
     card: {
         backgroundColor: 'white',
@@ -60,6 +63,15 @@ const styles = {
     },
     notVotedYetFont: {
         color: '#35ad27',
+    },
+    headerText: {
+        fontSize: 18,
+        color: headerFontColor
+    },
+    headerLeft: {
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center'      
     }
 }
 class VoteItem extends Component{
@@ -72,6 +84,8 @@ class VoteItem extends Component{
         this.votes = firebase.firestore().collection('votes');
         this.onCollectionUpdate = this.onCollectionUpdate.bind(this);
         this.initVote = this.initVote.bind(this);
+        this.setModalVisible = this.setModalVisible.bind(this);
+        this.renderBigImage = this.renderBigImage.bind(this);
         
         this.state = {
             name: '',
@@ -80,7 +94,8 @@ class VoteItem extends Component{
             todayVoted: false,
             todayTotalVote: 0,
             todayVote: 0,
-            voteItemVisible: true
+            voteItemVisible: true,
+            modalVisible: false
         }
     }
     componentWillMount(){
@@ -109,6 +124,13 @@ class VoteItem extends Component{
             votes,
             loading: false,
         });
+    }
+    setModalVisible(visible) {
+        this.setState({modalVisible: visible});
+    }
+
+    renderBigImage(image) {
+        return <AutoHeightImage width={width} source={image} />
     }
    
     initVote(){
@@ -253,8 +275,40 @@ class VoteItem extends Component{
     render(){
             return(
                 <View>
-                {this.state.voteItemVisible && <View style={styles.card}>           
+                    <Modal
+                    animationType="slide"
+                    transparent={false}
+                    visible={this.state.modalVisible}
+                    onRequestClose={() => {
+                        alert('Modal has been closed.');
+                    }}>
+                    <View style={{marginTop: 22}}>
+                        <View>
+                        <TouchableHighlight
+                            onPress={() => {
+                            this.setModalVisible(!this.state.modalVisible);
+                            }}>
+                            <View style={styles.headerLeft}>
+                                <Icon 
+                                name="angle-left" 
+                                size={30} 
+                                style={{marginRight: 5, marginLeft: 5}}
+                                color={headerFontColor}>
+                                </Icon>
+                                <Text style={styles.headerText}>返回</Text>
+                            </View>
+                        </TouchableHighlight>
+                        <ScrollView style={{marginTop: 10}}>
+                        {this.props.imageURL ? this.renderBigImage({uri: this.props.imageURL}) : <View style={styles.image}></View>}
+                        </ScrollView>
+                        
+                        </View>
+                    </View>
+                </Modal>
+                {this.state.voteItemVisible && <View style={styles.card}>  
+                <TouchableOpacity onPress={()=>this.setModalVisible(true)}>        
                 <Image style={{width: cardWidth, height: cardWidth, resizeMode: 'contain'}} source={{uri: this.props.imageURL}} />
+                </TouchableOpacity>
                 <View style={styles.metadata}>
                 <View style={styles.title}>
                     <Text>{this.props.title}</Text>
@@ -277,7 +331,9 @@ class VoteItem extends Component{
                     style={[styles.voteButton, (this.state.todayVote)?styles.haveVoted:styles.notVotedYet]}
                     onPress={this.vote}
                 >
-                    <Text style={(this.state.todayVote)?styles.haveVotedFont:styles.notVotedYetFont}>投票</Text>
+                    <Text style={(this.state.todayVote)?styles.haveVotedFont:styles.notVotedYetFont}>
+                    {(this.state.todayVote)?'收回':'投票'}
+                    </Text>
                     
                 </TouchableOpacity>
             </View>}

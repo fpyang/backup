@@ -4,6 +4,7 @@ import ProgressBarAnimated from 'react-native-progress-bar-animated';
 import firebase from 'react-native-firebase';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { connect } from 'react-redux';
+import LLTextInput from '../utilities/LLTextInput';
 
 import VoteItem from './VoteItem';
 const { width, height } = Dimensions.get('window');
@@ -15,14 +16,16 @@ const styles = {
         flexWrap: 'wrap'
     },
     submit: {
-      alignItems: 'center'
+      backgroundColor: '#f7f7f7',
+      alignItems: 'center',
+      marginTop: 20
     },
     searchBarContainer: {
         width: '100%',
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
-        height: 40,
+        height: 10,
         margin: 3
     },
     searchBar: {
@@ -262,7 +265,7 @@ class Vote extends Component{
             <View style={styles.progressBarOverlay}></View>
             <View style={{width: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-around', margin: 2}}>
             <Text style={styles.voteNormalFont}>{`每日限投5票，累計投滿14天可得大獎!`}</Text>
-            <View style={{display: 'flex', flexDirection: 'row', alignSelf: 'flex-end'}}>
+            <View style={{display: 'flex', flexDirection: 'row', alignSelf: 'flex-start'}}>
             <Text style={styles.voteNormalFont}>{`今日已投 `}</Text><Text style={styles.voteFont}>{`${this.state.todayVote}`}</Text><Text style={styles.voteNormalFont}>{` 票，共投 `}</Text>
             <Text style={styles.voteFont}>{`${this.state.progress}`}</Text><Text style={styles.voteNormalFont}>{` 票`}</Text>
             </View>
@@ -295,8 +298,7 @@ class Vote extends Component{
     }
 }
 /*
-
-                <TextInput
+                <LLTextInput
                     style={styles.searchBar}
                     onChangeText={(searchTerms) => this.setState({searchTerms})}
                     value={this.state.searchTerms}

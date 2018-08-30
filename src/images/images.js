@@ -13,4 +13,7 @@ export const learningVideo = require('./learning/video.png');
 export const learningWrite = require('./learning/write.png');
 export const learningRead = require('./learning/read.png');
 export const learningStar = require('./learning/star.png');
+export const onboarding01 = require('./onboarding/onboarding_01.png');
+export const onboarding02 = require('./onboarding/onboarding_02.png');
+export const onboarding03 = require('./onboarding/onboarding_03.png');
 

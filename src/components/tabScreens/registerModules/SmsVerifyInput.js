@@ -1,8 +1,8 @@
 import React from 'react';
 import { TextInput, View, Text, Dimensions} from 'react-native';
+import LLTextInput from '../activityModules/utilities/LLTextInput';
 
 const screenWidth = Dimensions.get('window').width;
-
 const commonHeight = 100;
 const commonWidth = screenWidth;
 
@@ -209,7 +209,7 @@ const SmsVerifyInput = ({ value, onChangeText, placeholder, secureTextEntry, max
       <View style={styles.textStyle}>
         <CodeRender value={value}/>
       </View>
-      <TextInput
+      <LLTextInput
         underlineColorAndroid={'transparent'}
         secureTextEntry={secureTextEntry}
         placeholder={placeholder}

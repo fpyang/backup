@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import axios from 'axios';
 import ActionSheet from 'react-native-actionsheet';
+import LLTextInput from '../utilities/LLTextInput';
 import { setCurrentWritingContext } from '../../../../actions/index';
 
 const styles = {
@@ -64,7 +65,7 @@ class WarmUpTyping extends Component{
             </View>
             <View style={{height: this.state.keyboardHeight}}>
             <ScrollView keyboardShouldPersistTaps='always'>
-            <TextInput
+            <LLTextInput
                     underlineColorAndroid={'transparent'}
                     autoFocus = {true}
                     multiline = {true}
@@ -82,7 +83,7 @@ class WarmUpTyping extends Component{
             </View>
             <View style={styles.hintTextLayout}>
             <Text style={styles.hintText}>文章最少500字, 已輸入{this.state.wordLength}字</Text>
-            <Text>{JSON.stringify(this.props.writingContext)}</Text>
+            
             </View>
             <ActionSheet
                 ref={o => this.ActionSheet = o}

@@ -3,8 +3,9 @@ import { connect } from 'react-redux';
 import { View, Text, TouchableOpacity, TextInput } from 'react-native';
 import { bindActionCreators } from 'redux';
 import firebase from 'react-native-firebase';
-import { regNext, regLast, setAppStage, signIn, saveCurrentProfile } from '../../../actions/index';
+import { regNext, regLast, setAppStage, signIn, saveCurrentProfile, setOnboardingStatus } from '../../../actions/index';
 import { SmsVerifyInput } from './SmsVerifyInput';
+import LLTextInput from '../activityModules/utilities/LLTextInput';
 import UserProfile from './UserProfile';
 
 const styles = {
@@ -43,8 +44,10 @@ class PhoneVerify extends Component{
         this.users = firebase.firestore().collection('users');
         this.syncCurrentUserProfile = this.syncCurrentUserProfile.bind(this);
         
+        
     }
     componentDidMount() {
+        
         this.unsubscribe = firebase.auth().onAuthStateChanged((user) => {
           if (user) {
             this.setState({ user: user.toJSON()});
@@ -64,6 +67,8 @@ class PhoneVerify extends Component{
             });
           }
         });
+        
+       
       }
     
       componentWillUnmount() {
@@ -142,33 +147,36 @@ class PhoneVerify extends Component{
         const { codeInput, confirmResult } = this.state;
         if(codeInput!= null){
             if (confirmResult && codeInput.length) {
-                confirmResult.confirm(codeInput)
-                  .then((user) => {
-                    this.setState({ message: 'Code Confirmed!' });
-                    this.setState({user});                  
-                    //check if user existed in fireCloud?
-                    //existing user
-                    //this.props.setAppStage('Login');//Skip filling user profile form
-                    //new user
-                    // Create a query against the collection
-                    this.users.where("uid", "==", user.uid).get()
-                    .then(querySnapshot => {
-                        let size = querySnapshot.size;
-                        if(size > 0){
-                            this.props.setAppStage('Login');//Skip filling user profile form
-                            //Load user-profile to app
-                            querySnapshot.forEach(documentSnapshot => {
-                                this.props.saveCurrentProfile(documentSnapshot.data());                        
-                          });
-                        }else{
-                            this.props.signIn(user);
-                            this.props.regNext();//lead to user profile filling page
-                        }
-                    
-                    });
-                    
-                  })
-                  .catch(error => this.setState({ message: `Code Confirm Error: ${codeInput} ${error.message}` }));
+                if(codeInput.length == 6){
+                    confirmResult.confirm(codeInput)
+                    .then((user) => {
+                      this.setState({ message: 'Code Confirmed!' });
+                      this.setState({user});                  
+                      //check if user existed in fireCloud?
+                      //existing user
+                      //this.props.setAppStage('Login');//Skip filling user profile form
+                      //new user
+                      // Create a query against the collection
+                      this.users.where("uid", "==", user.uid).get()
+                      .then(querySnapshot => {
+                          let size = querySnapshot.size;
+                          if(size > 0){
+                              this.props.setAppStage('Login');//Skip filling user profile form
+                              //Load user-profile to app
+                              querySnapshot.forEach(documentSnapshot => {
+                                  this.props.saveCurrentProfile(documentSnapshot.data());                        
+                            });
+                          }else{
+                              this.props.signIn(user);
+                              this.props.regNext();//lead to user profile filling page
+                          }
+                      
+                      });
+                      
+                    })
+                    .catch(error => this.setState({ message: `Code Confirm Error: ${codeInput} ${error.message}` }));
+                }
+                
               }
         }   
       };
@@ -215,7 +223,7 @@ class PhoneVerify extends Component{
                         alignItems: 'center',
                         height: 50, width: '100%', borderColor: 'gray', borderWidth: 0.5}}>
                     <View><Text>電話號碼:</Text></View>
-                    <TextInput
+                    <LLTextInput
                         underlineColorAndroid={'transparent'}
                         style={{height: '100%', width: '80%'}}
                         onChangeText={(phoneNumber) => {
@@ -275,7 +283,7 @@ class PhoneVerify extends Component{
 
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({ regNext, regLast, setAppStage, signIn, saveCurrentProfile }, dispatch);
+    return bindActionCreators({ regNext, regLast, setAppStage, signIn, saveCurrentProfile, setOnboardingStatus }, dispatch);
   }
   
   
@@ -283,7 +291,8 @@ function mapStateToProps(state) {
     return {
         regStage: state.regStage,
         appStage: state.appStage,
-        signIn: state.signIn
+        signIn: state.signIn,
+        onboarding: state.onboarding
     };
   }
   

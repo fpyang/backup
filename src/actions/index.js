@@ -12,8 +12,17 @@ export const REG_LAST = 'REG_LAST';
 export const FUNWORD_STATE = 'FUNWORD_STATE';
 export const SIGN_IN = 'SIGN_IN';
 export const USER_PROFILE = 'USER_PROFILE';
+export const ONBOARDING = 'ONBOARDING';
 
 
+export function setOnboardingStatus(status){
+  return{
+    type: ONBOARDING,
+    payload: {
+      status
+    }
+  }
+}
 
 //SIGN_IN
 export function saveCurrentProfile(user){

@@ -41,7 +41,6 @@
 		2D16E6881FA4F8E400B85C8A /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D16E6891FA4F8E400B85C8A /* libReact.a */; };
 		2DCD954D1E0B4F2C00145EB5 /* uCampusTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* uCampusTests.m */; };
 		2DF0FFEE2056DD460020B375 /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3DAD3EA31DF850E9000B6D8A /* libReact.a */; };
-		5E9157361DD0AC6A00FF2AA8 /* libRCTAnimation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E9157331DD0AC6500FF2AA8 /* libRCTAnimation.a */; };
 		68EC93A293B647A9B4B74C49 /* Entypo.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7E809F790168454A8788264A /* Entypo.ttf */; };
 		6AAB3B3726EE4BF3B2D63436 /* Feather.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F1354082BE2B4E4ABF426C5C /* Feather.ttf */; };
 		782E7C77264D41D2B84F7E32 /* FontAwesome.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C084FB8F5AAF460292ED2FA8 /* FontAwesome.ttf */; };
@@ -57,6 +56,7 @@
 		DB6B9FC321227E3600D6B363 /* QBImagePicker.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = DB6B9FC121227E3600D6B363 /* QBImagePicker.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		DB6B9FC52122AA7E00D6B363 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = DB6B9FC42122AA7D00D6B363 /* GoogleService-Info.plist */; };
 		DB6B9FC62122AA7E00D6B363 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = DB6B9FC42122AA7D00D6B363 /* GoogleService-Info.plist */; };
+		DB7B9A8B2136961700218574 /* libRCTAnimation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E9157331DD0AC6500FF2AA8 /* libRCTAnimation.a */; };
 		DBB1C9BEBCFD47A789FE9FB5 /* Foundation.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 68B7114F11C54210BDAC5134 /* Foundation.ttf */; };
 		E6CAE4D9278FAB908CF432BB /* libPods-uCampus.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 894220191E30417B0FD87959 /* libPods-uCampus.a */; };
 /* End PBXBuildFile section */
@@ -440,9 +440,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				ADBDB9381DFEBF1600ED6528 /* libRCTBlob.a in Frameworks */,
-				5E9157361DD0AC6A00FF2AA8 /* libRCTAnimation.a in Frameworks */,
+				DB7B9A8B2136961700218574 /* libRCTAnimation.a in Frameworks */,
 				146834051AC3E58100842450 /* libReact.a in Frameworks */,
-				5E9157361DD0AC6A00FF2AA8 /* libRCTAnimation.a in Frameworks */,
 				00C302E51ABCBA2D00DB3ED1 /* libRCTActionSheet.a in Frameworks */,
 				00C302E71ABCBA2D00DB3ED1 /* libRCTGeolocation.a in Frameworks */,
 				00C302E81ABCBA2D00DB3ED1 /* libRCTImage.a in Frameworks */,
@@ -847,7 +846,7 @@
 		83CBB9F71A601CBA00E9B192 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 610;
+				LastUpgradeCheck = 0940;
 				ORGANIZATIONNAME = Facebook;
 				TargetAttributes = {
 					00E356ED1AD99517003FC87E = {
@@ -1470,6 +1469,7 @@
 					"-ObjC",
 					"-lc++",
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/uCampus.app/uCampus";
 			};
@@ -1500,6 +1500,7 @@
 					"-ObjC",
 					"-lc++",
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/uCampus.app/uCampus";
 			};

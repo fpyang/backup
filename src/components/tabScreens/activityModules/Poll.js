@@ -128,13 +128,13 @@ class Poll extends Component{
         compressImageQuality: 0.7,
         mediaType: 'photo'
     }).then(image => {
-        console.log(image);
+        //console.log(image);
         this.setState({
         image: {uri: image.path, width: image.width, height: image.height}});
         //this.props.addImages(image);
 
     }).catch( reason => {
-            console.log( 'onRejected function called: ', reason );
+            //console.log( 'onRejected function called: ', reason );
     });
 
     }
@@ -148,7 +148,7 @@ class Poll extends Component{
         compressImageQuality: 0.7,
         mediaType: 'photo'
     }).then(image => {
-        console.log(image);
+        //console.log(image);
         this.setState({
         image: {uri: image.path, width: image.width, height: image.height}});
 
@@ -181,7 +181,7 @@ class Poll extends Component{
         */
 
     }).catch( reason => {
-            console.log( 'onRejected function called: ', reason );
+            //console.log( 'onRejected function called: ', reason );
     });
     }
 
