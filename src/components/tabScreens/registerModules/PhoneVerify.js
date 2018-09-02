@@ -33,7 +33,8 @@ class PhoneVerify extends Component{
             phoneNumber: '',
             validPhoneNum: '',
             phoneNumberFormValid: false,
-            confirmResult: null
+            confirmResult: null,
+            authStateChanged: ''
         }
         this.renderPhoneInput = this.renderPhoneInput.bind(this);
         this.isNumeric = this.isNumeric.bind(this);
@@ -43,17 +44,35 @@ class PhoneVerify extends Component{
         this.confirmCode = this.confirmCode.bind(this);
         this.users = firebase.firestore().collection('users');
         this.syncCurrentUserProfile = this.syncCurrentUserProfile.bind(this);
-        
-        
+          
     }
     componentDidMount() {
         
         this.unsubscribe = firebase.auth().onAuthStateChanged((user) => {
           if (user) {
+            this.setState({ authStateChanged: JSON.stringify(user)});
             this.setState({ user: user.toJSON()});
-            //this.props.signIn(user);
-            this.syncCurrentUserProfile(user.uid)
-            this.props.setAppStage('Login');
+            this.props.signIn(user);
+            this.syncCurrentUserProfile(user.uid);
+
+            this.users.where("uid", "==", user.uid).get()
+                      .then(querySnapshot => {
+                          let size = querySnapshot.size;
+                          if(size > 0){
+                              this.props.setAppStage('Login');//Skip filling user profile form
+                              //Load user-profile to app
+                              querySnapshot.forEach(documentSnapshot => {
+                                  this.props.saveCurrentProfile(documentSnapshot.data());                        
+                            });
+                          }else{
+                              this.props.setAppStage('Registering');
+                              this.props.setRegStage('Profile');
+                          }
+                      
+                      });
+                      
+            //this.props.setAppStage('Login');
+            //this.props.setAppStage('Registering');
           } else {
             // User has been signed out, reset the state
             this.setState({
@@ -195,6 +214,7 @@ class PhoneVerify extends Component{
         <View style={{flex: 1}}>
             <View style={styles.bar}>
                 
+                <Text>{JSON.stringify(this.state.message)}</Text>
                 {this.props.regStage.hasLast && 
                 <TouchableOpacity onPress={()=>{this.props.regLast()}}
                 ><Text style={{fontSize: 18, fontWeight: 'bold'}}> {'電話驗證'} </Text></TouchableOpacity>}
@@ -264,17 +284,21 @@ class PhoneVerify extends Component{
     }
 
     render(){
+        /*
         if(this.props.signIn.user){
             if(this.props.signIn.user.uid){
 
                 this.props.setAppStage('Login');
 
             }
-        }
+        }*/
         //Set logout mechanism
-        
+       // <Text>{JSON.stringify(this.state.message)}</Text>
+       // <Text>authStateChanged: {this.state.authStateChanged}</Text>
         return (
             <View style={styles.page}>
+                <Text>{JSON.stringify(this.state.message)}</Text>
+                <Text>authStateChanged: {this.state.authStateChanged}</Text>
                 {this.renderPhoneInput()}       
             </View>
         )

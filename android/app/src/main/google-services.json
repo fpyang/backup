@@ -23,6 +23,73 @@
           }
         },
         {
+          "client_id": "510890206158-877drtb7rp6d5qkp7v2or1uptmk7jthc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.uceUCampus",
+            "certificate_hash": "388974ac0ba80f6e2cd0d825f9087770b1694908"
+          }
+        },
+        {
+          "client_id": "510890206158-7rkhg323hme0d1tluqlgcqgd1fe7h849.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.uceUCampus",
+            "certificate_hash": "4b96a1679b2937acee8cd2d00356247fd0e10f27"
+          }
+        },
+        {
+          "client_id": "510890206158-6frplgs0obgub4o4fg2n65fk2gndgh76.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAJahcRA6i_I_nmJS2xcLpTPnWN11VdnWM"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "510890206158-6frplgs0obgub4o4fg2n65fk2gndgh76.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "510890206158-hbo9s0773p1ef0t70i8kf73h6viq2h27.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "org.reactjs.native.uce.uCampus"
+              }
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:510890206158:android:2e846695e4df1d98",
+        "android_client_info": {
+          "package_name": "com.uceUcampus"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "510890206158-dueo68c70r0m32eljj7rhghmsofaia21.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.uceUcampus",
+            "certificate_hash": "9ddae1283c59dd70d50be94adf7e2d3070d049ab"
+          }
+        },
+        {
           "client_id": "510890206158-6frplgs0obgub4o4fg2n65fk2gndgh76.apps.googleusercontent.com",
           "client_type": 3
         }
