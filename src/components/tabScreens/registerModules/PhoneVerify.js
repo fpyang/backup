@@ -65,8 +65,9 @@ class PhoneVerify extends Component{
                                   this.props.saveCurrentProfile(documentSnapshot.data());                        
                             });
                           }else{
-                              this.props.setAppStage('Registering');
-                              this.props.setRegStage('Profile');
+                            this.props.signIn(user);
+                            this.props.regNext();//lead to user profile filling page
+                              
                           }
                       
                       });
@@ -213,8 +214,6 @@ class PhoneVerify extends Component{
         return(
         <View style={{flex: 1}}>
             <View style={styles.bar}>
-                
-                <Text>{JSON.stringify(this.state.message)}</Text>
                 {this.props.regStage.hasLast && 
                 <TouchableOpacity onPress={()=>{this.props.regLast()}}
                 ><Text style={{fontSize: 18, fontWeight: 'bold'}}> {'電話驗證'} </Text></TouchableOpacity>}
@@ -297,8 +296,6 @@ class PhoneVerify extends Component{
        // <Text>authStateChanged: {this.state.authStateChanged}</Text>
         return (
             <View style={styles.page}>
-                <Text>{JSON.stringify(this.state.message)}</Text>
-                <Text>authStateChanged: {this.state.authStateChanged}</Text>
                 {this.renderPhoneInput()}       
             </View>
         )
