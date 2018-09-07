@@ -35,6 +35,10 @@ class ListItem extends Component{
         if(this.props.itemTitle){
             content = (<Text style={styles.itemTitle}>{this.props.itemTitle}</Text>);
         }
+        let notWeebly = false;
+        if(this.props.notWeebly){
+            notWeebly=true;
+        }
         return(
         <TouchableOpacity 
           onPress={
@@ -42,7 +46,8 @@ class ListItem extends Component{
               this.props.navigation.navigate('Leaf', { 
                   title: this.props.title, 
                   back: this.props.back,
-                  pageUrl: this.props.pageUrl
+                  pageUrl: this.props.pageUrl,
+                  notWeebly: notWeebly
                 })
               }
             }

@@ -627,7 +627,7 @@ class Review extends Component{
                 <Text style={styles.sectionText}>{configObj.section}</Text></View>);
             configObj.data.map(
               (configObjData, index)=>{
-                  container.push(<ListItem {...this.props} {...configObjData} key={configObj.section+index}/>);
+                  container.push(<ListItem {...this.props} {...configObjData} notWeebly={true} key={configObj.section+index}/>);
               }
           )
         }

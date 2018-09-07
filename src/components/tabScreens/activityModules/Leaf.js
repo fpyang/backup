@@ -16,12 +16,22 @@ export default class Leaf extends Component{
     //signup-container-header
     render(){
         //console.log(this.props.navigation.state.params.pageUrl);
-        return(
-        <View style={{flex: 1}}>
-            <View style={styles.content}>
-            <WeeblyWebView source={{uri: this.props.navigation.state.params.pageUrl}} />
-            </View>
-        </View>);
+       //The props 'notWeebly' of navigation is used to replace WeeblyWebView with WebView
+        if(this.props.navigation.state.params.notWeebly){
+            return(
+                <View style={{flex: 1}}>
+                    <View style={styles.content}>
+                    <WebView source={{uri: this.props.navigation.state.params.pageUrl}} style={{height: '100%', marginTop: 5}}></WebView>
+                    </View>
+                </View>);
+        }else{
+            return(
+                <View style={{flex: 1}}>
+                    <View style={styles.content}>
+                    <WeeblyWebView source={{uri: this.props.navigation.state.params.pageUrl}} />
+                    </View>
+                </View>);
+        }
     }
 }
 
