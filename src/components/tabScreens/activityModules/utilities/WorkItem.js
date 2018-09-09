@@ -116,11 +116,13 @@ class WorkItem extends Component{
                          (<View style={styles.scoreBox}>
                          <Text style={styles.scoreNumber}>{this.props.score}</Text>
                          <Text style={styles.scoreText}>整體分數</Text></View>);
+        
+        var completeText = this.props.type == 'draft' ? '修改日期' : '完成日期';
 
         let content = (<View style={styles.contentArea}>
         <Text style={styles.contentTitle}>{this.props.title}</Text>
         <Text style={styles.contentStartTime}>測驗日期：{this.formatDate(this.props.startTime)}</Text>
-        <Text style={styles.contentEndTime}>完成日期：{this.formatDate(this.props.endTime)}</Text>
+        <Text style={styles.contentEndTime}>{completeText}：{this.formatDate(this.props.endTime)}</Text>
         </View>);
 
         let currentWritingContext = {

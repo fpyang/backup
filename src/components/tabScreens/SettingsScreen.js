@@ -862,8 +862,40 @@ class SettingsScreen extends Component{
                                     </View>
                                 </View>
                             </Modal>
+                            
+                            
             
-                            <TouchableOpacity
+                            
+                           
+            
+                            <View style={{height: 50, justifyContent: 'flex-end', padding: 5}}>
+                            <Text>
+                            手機號碼
+                            </Text>
+                            </View>
+                            <View style={styles.phoneSpace}>
+                                <Text>{this.props.signIn.user.phoneNumber}</Text>
+                            </View>
+            
+                            <View style={{height: 50, justifyContent: 'flex-end', padding: 5}}>
+                            <Text>
+                            </Text>
+                            </View>
+                            <TouchableOpacity 
+                            style={styles.logoutSpace}
+                            onPress={this.logout}
+                            >
+                                <Text style={styles.logout}>{'登出'}</Text>
+                            </TouchableOpacity>
+            
+                        </ScrollView>
+                    }
+                    
+                    </View>
+                );     
+                
+                /*
+                <TouchableOpacity
                                         onPress={() => {
                                         
                                         if(this.state.admissionFirstTimeAlert){
@@ -891,35 +923,8 @@ class SettingsScreen extends Component{
                                             promptText={''}
                                             />
                             </TouchableOpacity>
-            
-            
-                           
-            
-                            <View style={{height: 50, justifyContent: 'flex-end', padding: 5}}>
-                            <Text>
-                            手機號碼
-                            </Text>
-                            </View>
-                            <View style={styles.phoneSpace}>
-                                <Text>{this.props.signIn.user.phoneNumber}</Text>
-                            </View>
-            
-                            <View style={{height: 50, justifyContent: 'flex-end', padding: 5}}>
-                            <Text>
-                            </Text>
-                            </View>
-                            <TouchableOpacity 
-                            style={styles.logoutSpace}
-                            onPress={this.logout}
-                            >
-                                <Text style={styles.logout}>{'登出'}</Text>
-                            </TouchableOpacity>
-            
-                        </ScrollView>
-                    }
-                    
-                    </View>
-                );         
+                */
+
         
     }
 }

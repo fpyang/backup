@@ -78,6 +78,11 @@ const styles = {
         color: 'white',
         fontSize: 20,
         fontWeight: 'bold'
+    },
+    controlText: {
+        color: 'gray',
+        fontSize: 25,
+        fontWeight: 'bold'
     }
 }
 class OnBoarding extends Component{
@@ -114,6 +119,8 @@ class OnBoarding extends Component{
                 containerStyle={styles.wrapper} 
                 showsButtons={true}
                 onMomentumScrollEnd={this._onMomentumScrollEnd}
+                nextButton={<Text style={styles.controlText}>›</Text>}
+                prevButton={<Text style={styles.controlText}>‹</Text>}
             >
                 <View style={styles.slide1}>
                 <Image style={styles.iconImg} source={onboarding01}/>

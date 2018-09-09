@@ -26,7 +26,7 @@ const styles = {
         height: imageSize,
         width: imageSize,
         backgroundColor: 'gray',
-        margin: 8,
+        margin: 2,
         resizeMode: 'contain'
     },
     imageUploaded: {
@@ -37,7 +37,7 @@ const styles = {
         resizeMode: 'contain'
     },
     imageGroup: {
-        height: imageSize + 50,
+        height: imageSize,
         width: width,
         backgroundColor: 'white',
         alignItems: 'center'
@@ -48,7 +48,7 @@ const styles = {
         color: 'black'
     },
     imageGroupContainer: {
-        height: imageSize * 2.3,
+        height: imageSize * 1.5,
         width: width,
         backgroundColor: 'white',
         justifyContent: 'center'
@@ -97,6 +97,14 @@ const styles = {
         borderRadius: 20,
         justifyContent: 'center',
         alignItems: 'center',
+        backgroundColor: '#2D82C6'
+    },
+    SubmitButtonCompleted: {
+        width: 150,
+        height: 50,
+        borderRadius: 20,
+        justifyContent: 'center',
+        alignItems: 'center',
         backgroundColor: 'gray'
     },
     headerText: {
@@ -107,7 +115,22 @@ const styles = {
         display: 'flex',
         flexDirection: 'row',
         alignItems: 'center'      
+    },
+    SubmitButtonText: {
+        color: 'white'
+    },
+    cameraCircle: {
+        width: imageSize,
+        height: imageSize,
+        borderWidth: 2,
+        borderRadius: imageSize/2,
+        borderColor: '#2D82C6',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginBottom: 5
     }
+    
 }
 
 const data = [
@@ -162,6 +185,7 @@ class Submit extends Component{
         this.onGroupClickHandler = this.onGroupClickHandler.bind(this);
         this.showActionSheet = this.showActionSheet.bind(this);
         this.renderImage=this.renderImage.bind(this);
+        this.renderImageCamera=this.renderImageCamera.bind(this);
         this.uploadImageFromImagePicker = this.uploadImageFromImagePicker.bind(this);
         this.uploadImageFromCamera = this.uploadImageFromCamera.bind(this);
         this.submitWork = this.submitWork.bind(this);
@@ -246,6 +270,22 @@ class Submit extends Component{
     
     renderImage(image) {
         return <Image style={styles.imageUploaded} source={image} />
+    }
+
+    renderImageCamera(){
+        return(<View style={styles.cameraCircle}>
+            <Icon
+            name="camera" size={30}
+            backgroundColor='transparent'
+            color={'#2D82C6'}
+            />
+        </View>);
+        /*return(
+            <Icon
+            name="camera" size={30}
+            backgroundColor='transparent'
+            color={'#2D82C6'}
+            />);*/
     }
 
     renderBigImage(image) {
@@ -498,7 +538,7 @@ class Submit extends Component{
             onPress={()=>{this.setModalVisible(true)}}
             >
                 <View style={styles.imageGroup}>
-                {this.state.image ? this.renderImage(this.state.image) : <View style={styles.image}></View>}
+                {this.state.image ? this.renderImage(this.state.image) : this.renderImageCamera()}
                     <Text style={styles.imageLabel}></Text>
                 </View>
             </TouchableOpacity>
@@ -598,7 +638,7 @@ class Submit extends Component{
                 
                 </RadioButton></View>: null}
             
-            <View style={styles.SubmitButton}>
+            <View style={styles.SubmitButtonCompleted}>
                 <Text>已完成投稿</Text>
             </View>
             
@@ -614,7 +654,7 @@ class Submit extends Component{
             onPress={this.showActionSheet}
             >
                 <View style={styles.imageGroup}>
-                {this.state.image ? this.renderImage(this.state.image) : <View style={styles.image}></View>}
+                {this.state.image ? this.renderImage(this.state.image) : this.renderImageCamera()}
                     <Text style={styles.imageLabel}>上傳作品</Text>
                 </View>
             </TouchableOpacity>
@@ -634,12 +674,12 @@ class Submit extends Component{
                     SubmitFieldPlaceholder={'選擇投稿題目'}
                     />
             </ModalSelector>
-            <SubmitFieldItem 
-                SubmitFieldTitle={'參賽組別'}
-                clickHander={this.onGroupClickHandler}
-                SubmitFieldContent={this.autoAssignFunwordGroup(this.props.signIn.user)}
-                SubmitFieldPlaceholder={'auto-fill'}
-                />
+                <SubmitFieldItem 
+                    SubmitFieldTitle={'參賽組別'}
+                    clickHander={this.onGroupClickHandler}
+                    SubmitFieldContent={this.autoAssignFunwordGroup(this.props.signIn.user)}
+                    SubmitFieldPlaceholder={'auto-fill'}
+                    />
             <View style={{alignSelf:'flex-start', marginLeft: 15 }}>
             <Text>       
                 {'我同意主辦單位將我的作品同步送件參加武漢木蘭草原盃比賽\n＊木蘭草原盃為大陸武漢地區辦理的書法(軟.硬筆)賽事'}
@@ -660,7 +700,7 @@ class Submit extends Component{
             <TouchableOpacity 
                 style={styles.SubmitButton}
                 onPress={this.submitWork}>
-                <Text>投稿</Text>
+                <Text style={styles.SubmitButtonText}>投稿</Text>
             </TouchableOpacity>
 
             <ActionSheet
@@ -708,7 +748,7 @@ class Submit extends Component{
                 onPress={this.showActionSheet}
                 >
                     <View style={styles.imageGroup}>
-                    {this.state.image ? this.renderImage(this.state.image) : <View style={styles.image}></View>}
+                    {this.state.image ? this.renderImage(this.state.image) : this.renderImageCamera()}
                         <Text style={styles.imageLabel}>上傳作品</Text>
                     </View>
                 </TouchableOpacity>
@@ -754,7 +794,7 @@ class Submit extends Component{
                 <TouchableOpacity 
                     style={styles.SubmitButton}
                     onPress={this.submitWork}>
-                    <Text>投稿</Text>
+                    <Text style={styles.SubmitButtonText}>投稿</Text>
                 </TouchableOpacity>
 
                 <ActionSheet

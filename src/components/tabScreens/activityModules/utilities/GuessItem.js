@@ -73,7 +73,7 @@ class GuessItem extends Component{
                 <View style={styles.item}>
                 <Image 
                 style={styles.itemThumbnail}
-                source={{uri: 'https://facebook.github.io/react-native/docs/assets/favicon.png'}}></Image>
+                source={{uri: this.props.imageUrl}}></Image>
                     <View style={styles.itemContent}>
                         <Text style={styles.itemTitle}> {this.props.itemTitle} </Text>
                         <Text style={styles.itemAuthor}> {this.props.itemAuthor} </Text>

@@ -605,34 +605,7 @@ class UserProfile extends Component{
                     </View>
                 </Modal>
 
-                <TouchableOpacity
-                            onPress={() => {
-                            
-                            if(this.state.admissionFirstTimeAlert){
-                                Alert.alert(
-                                    '入場證號碼將與手機號碼綁定，\n每一支手機只能查詢一個成績。',
-                                    '',
-                                    [
-                                    {text: '確認', onPress: () => {
-                                        this.setState({admissionFirstTimeAlert: false});
-                                        this.setAdmissionModalVisible(true);
-                                        
-                                    }},
-                                    ],
-                                    { cancelable: false }
-                                );
-                            }else{
-                                this.setAdmissionModalVisible(true);
-                            }  
-                            }}>
-                            <RegItem 
-                                textInput={true} 
-                                must={false} 
-                                fieldType={"入場證"} 
-                                prompt={this.state.admission}
-                                promptText={initAdmission}
-                                />
-                </TouchableOpacity>
+                
 
 
                 <View style={styles.agreement}>
@@ -668,11 +641,11 @@ class UserProfile extends Component{
                     onRequestClose={() => {
                         alert('Modal has been closed.');
                     }}>
-                    <View>
+                    <View style={{flex: 1}}>
                         <View style={styles.textInputHeader}>
                             <Text style={styles.textInputHeaderFont}>服務條款</Text>
                         </View>
-                        <View>        
+                        <View style={{flex: 1}}>        
                         <Text>....</Text>
                         <TouchableOpacity
                             onPress={() => {
@@ -693,18 +666,18 @@ class UserProfile extends Component{
                     onRequestClose={() => {
                         alert('Modal has been closed.');
                     }}>
-                    <View>
+                    <View style={{flex: 1}}>
                         <View style={styles.textInputHeader}>
                             <Text style={styles.textInputHeaderFont}>隱私權政策</Text>
                         </View>
-                        <View>        
+                        <View style={{flex: 1, flexDirection: 'column'}}>        
                         <Text>....</Text>
-                        <Text>{JSON.stringify(this.props.signIn.user)}</Text>
+                        
                         <TouchableOpacity
                             onPress={() => {
                             this.setPrivacyModalVisible(!this.state.privacyModalVisible);
                             }}>
-                            <View style={styles.textInputHeaderConfirm}>
+                            <View style={[styles.textInputHeaderConfirm, {alignSelf: 'flex-end'}]}>
                                 <Text style={styles.textInputHeaderFont}> 確定 </Text>
                             </View>
                         </TouchableOpacity>
@@ -717,6 +690,39 @@ class UserProfile extends Component{
     }
 
 }
+
+/*
+            <TouchableOpacity
+                            onPress={() => {
+                            
+                            if(this.state.admissionFirstTimeAlert){
+                                Alert.alert(
+                                    '入場證號碼將與手機號碼綁定，\n每一支手機只能查詢一個成績。',
+                                    '',
+                                    [
+                                    {text: '確認', onPress: () => {
+                                        this.setState({admissionFirstTimeAlert: false});
+                                        this.setAdmissionModalVisible(true);
+                                        
+                                    }},
+                                    ],
+                                    { cancelable: false }
+                                );
+                            }else{
+                                this.setAdmissionModalVisible(true);
+                            }  
+                            }}>
+                            <RegItem 
+                                textInput={true} 
+                                must={false} 
+                                fieldType={"入場證"} 
+                                prompt={this.state.admission}
+                                promptText={initAdmission}
+                                />
+                </TouchableOpacity>
+*/
+
+
 
 /*
 

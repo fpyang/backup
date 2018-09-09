@@ -40,7 +40,7 @@ class WarmUpTyping extends Component{
         super(props);
         this.state = {
             workText: this.props.writingContext.context.initText,
-            wordLength: 0,
+            wordLength: this.props.writingContext.context.initText.length,
             text: '',
             keyboardHeight: Dimensions.get('window').height
         }   

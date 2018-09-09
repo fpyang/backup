@@ -19,6 +19,31 @@ const styles = {
     }
 }
 class QA extends Component{
+
+    constructor(props){
+        super(props);
+        this.state = {
+            configObjs: {},
+            loading: true
+        }
+    }
+
+    componentWillMount(){
+
+        fetch(('https://ucampus-89e65.firebaseapp.com/static/json/qa.json'), {
+            method: 'GET'}).then((response) => {
+              if (response.status === 200) {
+                response.json().then(json => {
+                                      this.setState(Object.assign({}, this.state, {'configObjs': json, 'loading': false}));
+                                    });
+              } else {
+                //console.log(response.status);
+              }
+            })
+            .catch((error) => {
+              //console.log(error);
+            });
+    }
     
     render(){
         let container = [];
@@ -176,18 +201,26 @@ class QA extends Component{
             ]
             }
     ]
+    if(this.state.loading){
+ 
+        container = <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}><Text>loading</Text></View>
 
-    configObjs.map(
-        (configObj, index)=>{
-            container.push(<View style={styles.sectionStyle} key={'section'+index}>
-                <Text style={styles.sectionText}>{configObj.section}</Text></View>);
-            configObj.data.map(
-              (configObjData, index)=>{
-                  container.push(<ListItem {...this.props} {...configObjData} key={configObj.section+index}/>);
-              }
-          )
-        }
-    )
+    }else{
+        container = [];
+        this.state.configObjs.map(
+            (configObj, index)=>{
+                container.push(<View style={styles.sectionStyle} key={'section'+index}>
+                    <Text style={styles.sectionText}>{configObj.section}</Text></View>);
+                configObj.data.map(
+                  (configObjData, index)=>{
+                      container.push(<ListItem {...this.props} {...configObjData} key={configObj.section+index}/>);
+                  }
+              )
+            }
+        )
+
+    }
+    
 
         return(
         <View style={{flex: 1}}>

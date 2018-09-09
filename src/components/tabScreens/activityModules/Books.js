@@ -10,8 +10,33 @@ const styles = {
     }
 }
 class Books extends Component{
+    constructor(props){
+        super(props);
+        this.state = {
+            configObjs: {},
+            loading: true
+        }
+    }
+
+    componentWillMount(){
+
+        fetch(('https://ucampus-89e65.firebaseapp.com/static/json/books.json'), {
+            method: 'GET'}).then((response) => {
+              if (response.status === 200) {
+                response.json().then(json => {
+                                      this.setState(Object.assign({}, this.state, {'configObjs': json, 'loading': false}));
+                                    });
+              } else {
+                //console.log(response.status);
+              }
+            })
+            .catch((error) => {
+              //console.log(error);
+            });
+    }
     
     render(){
+        let container = [];
         let configObjs=[
             {
                 imgSrc: 'https://educoco.udn.com/image?i=upload/32/4f7fa7dd2505914d0a8ca715de6729cc65a213cb.jpg',
@@ -41,17 +66,25 @@ class Books extends Component{
                 itemAuthor: '作者: 第六屆聯合盃 全國作文優勝同學',
                 itemPublisher: '出版社: 聯合報股份有限公司'
             }
-    ]
+    ];
+
+    if(this.state.loading){
+ 
+        container = <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}><Text>loading</Text></View>
+
+    }else{
+        container = [];
+        this.state.configObjs.map((configObj, index)=>{
+            container.push(
+              <LinkItem{...configObj} key={index} />
+            );
+        })
+
+    }
         return(
         <View style={{flex: 1}}>
             <View style={styles.content}>
-              {
-                  configObjs.map((configObj, index)=>{
-                      return(
-                        <LinkItem{...configObj} key={index} />
-                      );
-                  })
-              }
+              {container}
             </View>
         </View>);
     }

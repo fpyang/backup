@@ -72,60 +72,67 @@ export default class MessageScreen extends Component{
         });
     }
     render(){
-        return(
-        <View style={{flex: 1}}>
-
-        <Modal
-          animationType="slide"
-          transparent={false}
-          visible={this.state.modalVisible}
-          onRequestClose={() => {
-            this.setModalVisible(!this.state.modalVisible);
-          }}>
-          <View style={{flex: 1, marginTop: 22}}>
-           
-              <View style={styles.headerBar}>
-              
-              <TouchableHighlight
-                onPress={() => {
-                  this.setModalVisible(!this.state.modalVisible);
-                }}>
-                <View style={styles.iconView}>
-                    <Icon name='angle-left' size={30} color='gray' />
-                </View>
-              </TouchableHighlight>
-              
-              <Text> 訊息 </Text>
-              <TouchableHighlight
-                onPress={() => {
-                }}>
-                <View style={styles.iconView} />
-              </TouchableHighlight>
-             </View>
-              <View style={{flex: 1, flexDirection:'column'}}>
-                <WeeblyWebView source={{uri: this.state.modalURL}} />
-              </View>
-            
-          </View>
-        </Modal>
-
-            <TitleBar title={'訊息'}/>
-            <ScrollView>
-                <FlatList
-                    style={{flex: 1, marginBottom: 130}}
-                    contentContainerStyle={styles.messages}
-                    data={this.state.messages}
-                    renderItem={({ item }) => {
-                        return(
-                            <TouchableHighlight onPress={()=>{
-                                this.setState({modalURL: item.detailURL});
-                                this.setModalVisible(true)}}>
-                                <MessageItem {...item} onClick={this.setModalVisible} />
-                            </TouchableHighlight>
-                        );
-                     }}
-                    />
-            </ScrollView>
-        </View>);
+        if(this.state.messages.length>0){
+            return(
+                <View style={{flex: 1}}>
+        
+                <Modal
+                  animationType="slide"
+                  transparent={false}
+                  visible={this.state.modalVisible}
+                  onRequestClose={() => {
+                    this.setModalVisible(!this.state.modalVisible);
+                  }}>
+                  <View style={{flex: 1, marginTop: 22}}>
+                   
+                      <View style={styles.headerBar}>
+                      
+                      <TouchableHighlight
+                        onPress={() => {
+                          this.setModalVisible(!this.state.modalVisible);
+                        }}>
+                        <View style={styles.iconView}>
+                            <Icon name='angle-left' size={30} color='gray' />
+                        </View>
+                      </TouchableHighlight>
+                      
+                      <Text> 訊息 </Text>
+                      <TouchableHighlight
+                        onPress={() => {
+                        }}>
+                        <View style={styles.iconView} />
+                      </TouchableHighlight>
+                     </View>
+                      <View style={{flex: 1, flexDirection:'column'}}>
+                        <WeeblyWebView source={{uri: this.state.modalURL}} />
+                      </View>
+                    
+                  </View>
+                </Modal>
+        
+                    <TitleBar title={'訊息'}/>
+                    <ScrollView>
+                        <FlatList
+                            style={{flex: 1, marginBottom: 130}}
+                            contentContainerStyle={styles.messages}
+                            data={this.state.messages}
+                            renderItem={({ item }) => {
+                                return(
+                                    <TouchableHighlight onPress={()=>{
+                                        this.setState({modalURL: item.detailURL});
+                                        this.setModalVisible(true)}}>
+                                        <MessageItem {...item} onClick={this.setModalVisible} />
+                                    </TouchableHighlight>
+                                );
+                             }}
+                            />
+                    </ScrollView>
+                </View>);
+        }else{
+            return(<View style={{display: 'flex', flex: 1, justifyContent: 'center', alignItems:'center'}}>
+                <Text>尚未有任何訊息</Text>
+            </View>);
+        }
+        
     }
 }
