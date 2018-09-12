@@ -46,8 +46,27 @@ class WinnerListContainer extends Component{
             },
             headerWord: {
                 color: '#2D82C6'
-            }
+            },
+            configObjs: {},
+            loading: true
         }
+    }
+
+    componentWillMount(){
+
+        fetch(('https://ucampus-89e65.firebaseapp.com/static/json/winnerList.json'), {
+            method: 'GET'}).then((response) => {
+              if (response.status === 200) {
+                response.json().then(json => {
+                                      this.setState(Object.assign({}, this.state, {'configObjs': json, 'loading': false}));
+                                    });
+              } else {
+                //console.log(response.status);
+              }
+            })
+            .catch((error) => {
+              //console.log(error);
+            });
     }
     //this.props.navigation.state.params.itemTitle
     //this.props.selectedLevel.awardLevel

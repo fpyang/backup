@@ -25,8 +25,19 @@ const styles = {
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
-        height: 10,
-        margin: 3
+        height: 20,
+        margin: 3,
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    groupBar: {
+        backgroundColor: 'white',
+        width: '100%',
+        height: 18,
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center'
     },
     searchBar: {
         width: '85%',
@@ -273,7 +284,9 @@ class Vote extends Component{
           </View>
             <View style={styles.searchBarContainer}>
                 
-                
+             <View style={styles.groupBar}>
+                 <Text>{(this.props.signIn.user.funwordGroup)?this.props.signIn.user.funwordGroup:''}</Text>
+             </View>   
                     
             </View>
                 <ScrollView>

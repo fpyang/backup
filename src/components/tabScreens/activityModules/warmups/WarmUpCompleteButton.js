@@ -48,11 +48,11 @@ class WarmUpCompleteButton extends Component{
                             concat(this.props.writingContext.questionTitle).
                             concat('&').concat('c=').concat(this.props.writingContext.content)
                           */
-                         var formData = new FormData();
-                         formData.append("t", this.props.writingContext.questionTitle);
-                         formData.append("c", this.props.writingContext.content);
-
-                          fetch(('http://140.122.63.113/aces/semacheck.ashx'), {
+                        var formData = new FormData();
+                        formData.append("t", this.props.writingContext.questionTitle);
+                        formData.append("c", this.props.writingContext.content);
+                        if(this.props.writingContext.content.length > 499){
+                        fetch(('http://140.122.63.113/aces/semacheck.ashx'), {
                                 method: 'POST',
                                 body: formData,           
                             }).then((response) => {
@@ -63,9 +63,7 @@ class WarmUpCompleteButton extends Component{
                                                                     '你的作文好像沒寫到跟題目有關係的內容，建議你再看一看自己的作文!',
                                                                     '你確定立即將作文送出評分?',
                                                                     [
-                                                                      {text: '確定', onPress: () => {
-
-                                                                        
+                                                                      {text: '確定', onPress: () => {    
 
                                                                         fetch(('http://140.122.63.113/aces/score.ashx'), {
                                                                                 method: 'POST',
@@ -138,12 +136,8 @@ class WarmUpCompleteButton extends Component{
                                                                     '',
                                                                     '你確定立即將作文送出評分?',
                                                                     [
-                                                                      {text: '確定', onPress: () => {
+                                                                      {text: '確定', onPress: () => {                                    
 
-                                                                        /*
-                                                                        fetch(('http://140.122.63.113/aces/score.ashx?').concat('t=').
-                                                                            concat(this.props.writingContext.questionTitle).
-                                                                            concat('&').concat('c=').concat(this.props.writingContext.content), {*/
                                                                                 fetch(('http://140.122.63.113/aces/score.ashx'), {
                                                                                 method: 'POST',
                                                                                 body: formData,
@@ -202,9 +196,6 @@ class WarmUpCompleteButton extends Component{
                                                                                     //console.log(error);
                                                                                 });
 
-                                                                        
-
-
                                                                       }},
                                                                       {text: '取消', onPress: () => {}}
                                                                     ],
@@ -219,8 +210,19 @@ class WarmUpCompleteButton extends Component{
                                 })
                                 .catch((error) => {
                                     //console.log(error);
-                                });
-                          
+                                });}else{
+
+                                    //alert the content length is less than 500 word
+                                    Alert.alert(
+                                        '字數小於500字',
+                                        '請充實內容後再評分,若是仍在醞釀靈感,可以先存成草稿',
+                                        [
+                                          {text: 'OK', onPress: () => {}},
+                                        ],
+                                        { cancelable: false }
+                                      )
+
+                                }
                           break;
                           case 1:
                           //submit with type draft

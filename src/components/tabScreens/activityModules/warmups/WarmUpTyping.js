@@ -73,7 +73,7 @@ class WarmUpTyping extends Component{
                     onChangeText={(text) => {
                         this.setState({workText: text});
                         //change redux data, i.e. {writingContext} here
-                        this.props.setCurrentWritingContext({content: text});
+                        this.props.setCurrentWritingContext({content: text, title: this.props.writingContext.context.questionTitle});
                         this.setState({wordLength: text.length});
                     }
                     }
@@ -85,14 +85,6 @@ class WarmUpTyping extends Component{
             <Text style={styles.hintText}>文章最少500字, 已輸入{this.state.wordLength}字</Text>
             
             </View>
-            <ActionSheet
-                ref={o => this.ActionSheet = o}
-                title={'Which one do you like ?'}
-                options={['Apple', 'Banana', 'cancel']}
-                cancelButtonIndex={2}
-                destructiveButtonIndex={1}
-                onPress={(index) => { }}
-                />
             </View>
         )
     }

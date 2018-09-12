@@ -21,14 +21,19 @@ export default class Leaf extends Component{
             return(
                 <View style={{flex: 1}}>
                     <View style={styles.content}>
-                    <WebView source={{uri: this.props.navigation.state.params.pageUrl}} style={{height: '100%', marginTop: 5}}></WebView>
+                    <WebView 
+                    source={{uri: this.props.navigation.state.params.pageUrl}} 
+                    startInLoadingState={true}
+                    style={{height: '100%', marginTop: 5}}></WebView>
                     </View>
                 </View>);
         }else{
             return(
                 <View style={{flex: 1}}>
                     <View style={styles.content}>
-                    <WeeblyWebView source={{uri: this.props.navigation.state.params.pageUrl}} />
+                    <WeeblyWebView 
+                    source={{uri: this.props.navigation.state.params.pageUrl}} 
+                    startInLoadingState={true}/>
                     </View>
                 </View>);
         }

@@ -34,17 +34,17 @@ const styles = {
     },
     text1: {
       color: '#1982C4',
-      fontSize: 30,
+      fontSize: 26,
       fontWeight: 'bold',
     },
     text2: {
         color: '#FF595E',
-        fontSize: 30,
+        fontSize: 26,
         fontWeight: 'bold',
       },
     text3: {
         color: '#8AC926',
-        fontSize: 30,
+        fontSize: 26,
         fontWeight: 'bold',
     },
     text1s: {
@@ -125,7 +125,7 @@ class OnBoarding extends Component{
                 <View style={styles.slide1}>
                 <Image style={styles.iconImg} source={onboarding01}/>
                 <Text style={styles.text1}>聯合盃精彩賽事，一手掌握</Text>
-                <Text style={styles.text1s}>賽區資訊、考題回顧、寫作秘笈、及時入你手</Text>
+                <Text style={styles.text1s}>賽區資訊、考題回顧、寫作秘笈、及時入手</Text>
                 </View>
                 <View style={styles.slide2}>
                 <Image style={styles.iconImg} source={onboarding02}/>

@@ -84,11 +84,11 @@ const styles = {
     },
     selectedSmallText: {
         color: 'white',
-        fontSize: 12
+        fontSize: 16
     },
     unselectedSmallText: {
         color: 'black',
-        fontSize: 12
+        fontSize: 16
     },
     selectedScoreText: {
         color: 'white',
@@ -163,7 +163,7 @@ class ScorePerspectiveSelector extends Component{
                         <Text style={[this.state.selectedLevel == '5' ? styles.selectedScoreText : styles.unselectedScoreText]}
                         >{this.props.writingContext.score.F4S}</Text>
                         <Text style={[this.state.selectedLevel == '5' ? styles.selectedSmallText : styles.unselectedSmallText]}
-                        >錯別字、格式與標點符號</Text>
+                        >{'錯別字、格式與\n標點符號'}</Text>
                     </TouchableOpacity>
                     <View 
                         style={styles.level06}

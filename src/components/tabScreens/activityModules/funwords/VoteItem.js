@@ -237,7 +237,7 @@ class VoteItem extends Component{
                         this.setState({todayVoted: true});
                         Alert.alert(
                             '今日投票狀況統計',
-                            `你剛剛收回一票，，還剩下${5-this.state.todayTotalVote+1}票`,
+                            `你剛剛收回一票，還剩下${5-this.state.todayTotalVote+1}票`,
                             [
                             {text: '確認', onPress: () => {}},
                             ],

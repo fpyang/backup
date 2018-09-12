@@ -72,7 +72,8 @@ export default class MessageScreen extends Component{
         });
     }
     render(){
-        if(this.state.messages.length>0){
+        if(this.state.messages){
+            if(this.state.messages.length>0){
             return(
                 <View style={{flex: 1}}>
         
@@ -129,10 +130,19 @@ export default class MessageScreen extends Component{
                     </ScrollView>
                 </View>);
         }else{
-            return(<View style={{display: 'flex', flex: 1, justifyContent: 'center', alignItems:'center'}}>
+            return(
+            <View style={{flex: 1, marginTop: 22}}>      
+            <View style={styles.headerBar}>
+            
+            </View>
+            <View style={{display: 'flex', flex: 1, justifyContent: 'center', alignItems:'center'}}>
                 <Text>尚未有任何訊息</Text>
-            </View>);
+            </View></View>);
         }
         
-    }
+    }else{
+        return(<View style={{display: 'flex', flex: 1, justifyContent: 'center', alignItems:'center'}}>
+                <Text>載入中</Text>
+            </View>);
+    }}
 }
