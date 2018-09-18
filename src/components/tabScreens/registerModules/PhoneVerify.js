@@ -65,8 +65,8 @@ class PhoneVerify extends Component{
                                   this.props.saveCurrentProfile(documentSnapshot.data());                        
                             });
                           }else{
-                            this.props.signIn(user);
-                            this.props.regNext();//lead to user profile filling page
+                            //this.props.signIn(user);
+                            //this.props.regNext();//lead to user profile filling page
                               
                           }
                       

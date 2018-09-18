@@ -48,6 +48,7 @@ class QA extends Component{
     render(){
         let container = [];
         let commonTitle = '常見問題';
+        /*
         let configObjs=[
             {
                 section: '報名',
@@ -200,7 +201,7 @@ class QA extends Component{
                     }
             ]
             }
-    ]
+    ]*/
     if(this.state.loading){
  
         container = <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}><Text>loading</Text></View>

@@ -8,6 +8,7 @@ import WorkItem from '../utilities/WorkItem';
 const styles = {
     page: {
         flex: 1,
+        display: 'flex',
         backgroundColor: 'white'
     }
 }
@@ -75,7 +76,10 @@ class WarmUpCollection extends Component{
             }
         ]
         return(<ScrollView style={styles.page}>
-            {this.state.warmUps.map(
+            {(this.state.warmUps.length===0)&&<View style={{flex: 1, justifyContent: 'center', alignItems: 'center', margin: 50}}>
+                <Text>尚未有作品產出</Text>
+            </View>}
+            {(this.state.warmUps.length>0)&&this.state.warmUps.map(
                     (value, index)=>{  
                             return(<WorkItem key={index} {...value} {...this.props} back='WarmUpCollection'/>);
                     }

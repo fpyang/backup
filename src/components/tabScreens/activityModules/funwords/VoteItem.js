@@ -2,8 +2,10 @@ import React, { Component } from 'react';
 import { View, Text, Dimensions, Image, TouchableOpacity, Alert, ScrollView, Modal, TouchableHighlight } from 'react-native';
 import firebase from 'react-native-firebase';
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import AutoHeightImage from 'react-native-auto-height-image';
+import { saveCurrentProfile } from '../../../../actions/index';
 
 const { height, width } = Dimensions.get('window');
 const cardWidth = width/2-12;
@@ -86,6 +88,7 @@ class VoteItem extends Component{
         this.initVote = this.initVote.bind(this);
         this.setModalVisible = this.setModalVisible.bind(this);
         this.renderBigImage = this.renderBigImage.bind(this);
+        this.autoAssignFunwordGroup = this.autoAssignFunwordGroup.bind(this);
         
         this.state = {
             name: '',
@@ -169,6 +172,39 @@ class VoteItem extends Component{
             });
           });
     }
+    autoAssignFunwordGroup(user){
+
+        let schoolType = user.schoolType;
+        let schoolLevel = user.schoolLevel;
+    
+        //國小 國中 高中職
+        //一年級 二年級 三年級 四年級 五年級 六年級 國七 國八 國九
+    
+        /*
+        1. 國小中年級組: 國小三年級 國小四年級
+        2. 國小高年級組: 五年級 六年級
+        3. 國中組: 國中
+        4. 高中職組: 高中職
+        */
+    
+        if(schoolType === '國中'){
+            return '國中組';
+        }
+        if(schoolType === '高中職'){
+          return '高中職組';
+        }
+        if(schoolType === '國小'){
+            if((schoolLevel === '三年級')||(schoolLevel === '四年級')){
+              return'國小中年級組';
+            }
+            if((schoolLevel === '五年級')||(schoolLevel === '六年級')){
+              return '國小高年級組';
+            }
+            if((schoolLevel === '一年級')||(schoolLevel === '二年級')){
+              return '國小低年級組'; //FIXME: 低年級要排除在外, 不顯示這活動
+            }
+        }
+      }
     vote(){
          let todayDate = new Date();
          let today = todayDate.getFullYear().toString() + '-' + (todayDate.getMonth()+1).toString()
@@ -209,13 +245,24 @@ class VoteItem extends Component{
 
                         }else{
                             //vote
+                            
                             this.setState({voteLock: true});
                             this.setState({todayVoted: false});
                             Alert.alert(
                                 '今日投票狀況統計',
                                 `恭喜你剛剛投下寶貴的一票，還剩下${5-this.state.todayTotalVote-1}票`,
                                 [
-                                {text: '確認', onPress: () => {}},
+                                {text: '確認', onPress: () => {
+                                    if(this.props.signIn.user.funwordGroup==null){
+                                        let submittedGroup = this.autoAssignFunwordGroup(this.props.signIn.user);
+                                        let user = {...this.props.signIn.user, funwordGroup: submittedGroup} 
+                                        //over-write a doc 
+                                        this.users.doc(this.props.signIn.user.uid).set(
+                                            user
+                                        );
+                                        this.props.saveCurrentProfile(user); 
+                                    } 
+                                }},
                                 ],
                                 { cancelable: false }
                             );
@@ -268,6 +315,15 @@ class VoteItem extends Component{
             title: '~~' + Math.floor(Math.random() * 10).toString(),
             complete: false,
           });*/
+        /*
+        let submittedGroup = this.autoAssignFunwordGroup(this.props.signIn.user);
+                                    let user = {...this.props.signIn.user, funwordGroup: submittedGroup} 
+                                    //over-write a doc 
+                                    this.users.doc(this.props.signIn.user.uid).set(
+                                        user
+                                    );
+        this.props.saveCurrentProfile(user); 
+        */
 
     }
     //TODO: responsive to determine the # of cards in a row
@@ -343,6 +399,11 @@ class VoteItem extends Component{
         
     }
 }
+//saveCurrentProfile
+function mapDispatchToProps(dispatch) {
+
+    return bindActionCreators({ saveCurrentProfile }, dispatch);
+}
 
 function mapStateToProps(state) {
     return {
@@ -351,5 +412,5 @@ function mapStateToProps(state) {
   }
   
   //export default connect(mapStateToProps, mapDispatchToProps)(Poll);
-  export default connect(mapStateToProps)(VoteItem);
+  export default connect(mapStateToProps, mapDispatchToProps)(VoteItem);
 

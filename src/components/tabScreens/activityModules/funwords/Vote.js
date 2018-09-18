@@ -188,38 +188,79 @@ class Vote extends Component{
             const { author, group, imageURL, title, draftStatus } = doc.data();
             let name = '';
             let schoolName = '';
-            if((draftStatus==='submitted') && (group === this.props.signIn.user.funwordGroup)){ //drafts are invisible to users// (group === this.autoAssignFunwordGroup(this.props.signIn.user))
-                this.users.where("uid", "==", author).get()
-                            .then(querySnapshot => {
-                                querySnapshot.forEach(documentSnapshot => {
-                                    name = documentSnapshot.data().name,
-                                    schoolName = documentSnapshot.data().schoolName 
-                                });
-                            }).then(
-                                ()=>{
-                                    works.push({
-                                        key: doc.id,
-                                        id: doc.id,
-                                        doc, // DocumentSnapshot
-                                        author,
-                                        name,
-                                        schoolName,
-                                        group,
-                                        imageURL,
-                                        title,
-                                        draftStatus
+            
+            if(this.props.signIn.user.funwordGroup==null){
+
+                if((draftStatus==='submitted') && (group === this.autoAssignFunwordGroup(this.props.signIn.user))){ //drafts are invisible to users// (group === this.autoAssignFunwordGroup(this.props.signIn.user))
+                    this.users.where("uid", "==", author).get()
+                                .then(querySnapshot => {
+                                    querySnapshot.forEach(documentSnapshot => {
+                                        name = documentSnapshot.data().name,
+                                        schoolName = documentSnapshot.data().schoolName 
                                     });
-                                }
-                            ).then(
-                                ()=>{
-                                    this.setState({ 
-                                        works,
-                                        loading: false,
-                                });
-                                }
-                            );
-                
-            }      
+                                }).then(
+                                    ()=>{
+                                        works.push({
+                                            key: doc.id,
+                                            id: doc.id,
+                                            doc, // DocumentSnapshot
+                                            author,
+                                            name,
+                                            schoolName,
+                                            group,
+                                            imageURL,
+                                            title,
+                                            draftStatus
+                                        });
+                                    }
+                                ).then(
+                                    ()=>{
+                                        this.setState({ 
+                                            works,
+                                            loading: false,
+                                    });
+                                    }
+                                );
+                    
+                } 
+
+            }else{
+
+                if((draftStatus==='submitted') && (group === this.props.signIn.user.funwordGroup)){ //drafts are invisible to users// (group === this.autoAssignFunwordGroup(this.props.signIn.user))
+                    this.users.where("uid", "==", author).get()
+                                .then(querySnapshot => {
+                                    querySnapshot.forEach(documentSnapshot => {
+                                        name = documentSnapshot.data().name,
+                                        schoolName = documentSnapshot.data().schoolName 
+                                    });
+                                }).then(
+                                    ()=>{
+                                        works.push({
+                                            key: doc.id,
+                                            id: doc.id,
+                                            doc, // DocumentSnapshot
+                                            author,
+                                            name,
+                                            schoolName,
+                                            group,
+                                            imageURL,
+                                            title,
+                                            draftStatus
+                                        });
+                                    }
+                                ).then(
+                                    ()=>{
+                                        this.setState({ 
+                                            works,
+                                            loading: false,
+                                    });
+                                    }
+                                );
+                    
+                } 
+
+            }
+                 
         });
         
     }
@@ -285,7 +326,7 @@ class Vote extends Component{
             <View style={styles.searchBarContainer}>
                 
              <View style={styles.groupBar}>
-                 <Text>{(this.props.signIn.user.funwordGroup)?this.props.signIn.user.funwordGroup:''}</Text>
+                 <Text>{(this.props.signIn.user.funwordGroup)?this.props.signIn.user.funwordGroup:this.autoAssignFunwordGroup(this.props.signIn.user)}</Text>
              </View>   
                     
             </View>

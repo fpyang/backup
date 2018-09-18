@@ -114,7 +114,10 @@ class Award extends Component{
         }else{
             return(
             <View style={{display: 'flex', flex: 1, justifycontent: 'center', alignItems: 'center'}}>
-                <Text>尚未公布</Text></View>)
+                <View style={{display: 'flex', margin: 30, flex: 1, justifycontent: 'center', alignItems: 'center'}}>
+                <Text>尚未公布</Text>
+                </View>
+            </View>)
             
         }
         

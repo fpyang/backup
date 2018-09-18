@@ -394,7 +394,7 @@ class Submit extends Component{
                                 }).then((value)=>{
                                     //this.haveSubmited();
                                     let submittedGroup = this.autoAssignFunwordGroup(this.props.signIn.user);
-                                   let user = {...this.props.signIn.user, funwordGroup: submittedGroup} 
+                                    let user = {...this.props.signIn.user, funwordGroup: submittedGroup} 
                                     //over-write a doc 
                                     this.users.doc(this.props.signIn.user.uid).set(
                                         user
@@ -467,18 +467,19 @@ class Submit extends Component{
                   }).then(
                       ()=>{
                           //this.haveSubmited();
-                          let submittedGroup = this.autoAssignFunwordGroup(this.props.signIn.user);
-                          let user = {...this.props.signIn.user, funwordGroup: submittedGroup} 
-                           //over-write a doc 
-                           this.users.doc(this.props.signIn.user.uid).set(
-                               user
-                           );
-
-                           this.setState({submitted: true});  
-                           
-                           //move to the next step
+                          if(this.props.signIn.user.funwordGroup==null){
+                            let submittedGroup = this.autoAssignFunwordGroup(this.props.signIn.user);
+                            let user = {...this.props.signIn.user, funwordGroup: submittedGroup} 
+                             //over-write a doc 
+                             this.users.doc(this.props.signIn.user.uid).set(
+                                 user
+                             );
+  
+                             this.setState({submitted: true});  
+                             //move to the next step
                            this.props.saveCurrentProfile(user); 
-                          
+                          }
+                                                  
                     }
                   );
             }},
@@ -595,10 +596,11 @@ class Submit extends Component{
             
             <View style={{alignSelf:'flex-start', marginLeft: 15 }}>
             <Text>       
-                {'我同意主辦單位將我的作品同步送件參加武漢木蘭草原盃比賽\n＊木蘭草原盃為大陸武漢地區辦理的書法(軟.硬筆)賽事'}
+                {'\n我同意主辦單位將我的作品同步送件參加武漢木蘭草原盃比賽\n＊木蘭草原盃為大陸武漢地區辦理的書法(軟.硬筆)賽事\n'}
             </Text>
             </View>
             {(this.state.initAgreement!=-1)?
+               //(this.state.draftStatus != 'notSubmitYet')?
                 <View style={{ flexDirection: 'row', alignItems: 'flex-start', alignSelf:'flex-start', marginLeft: 15 }}>
                 <RadioButton>
                 <RadioButtonInput
@@ -636,10 +638,49 @@ class Submit extends Component{
                     onPress={()=>{}}
                 />
                 
-                </RadioButton></View>: null}
+                </RadioButton></View>: 
+            <View style={{ flexDirection: 'row', alignItems: 'flex-start', alignSelf:'flex-start', marginLeft: 15 }}>
+            
+            <RadioButton>
+            <RadioButtonInput
+                obj={{label: '同意', value: 0}}
+                index={0}
+                isSelected={this.state.agreement==true}
+                disabled={true}
+                buttonInnerColor={'#EEE'}
+                buttonOuterColor={'#EEE'}
+                buttonSize={10}
+                buttonOuterSize={15}
+
+                onPress={()=>{}}
+            />
+            <RadioButtonLabel
+                obj={{label: '同意', value: 0}}
+                disabled={true}
+                onPress={()=>{}}
+            />
+            
+            <RadioButtonInput
+                obj={{label: '不同意', value: 1}}
+                index={1}
+                isSelected={this.state.agreement==false}
+                disabled={true}
+                buttonInnerColor={'#EEE'}
+                buttonOuterColor={'#EEE'}
+                buttonSize={10}
+                buttonOuterSize={15}
+                onPress={()=>{}}
+            />
+            <RadioButtonLabel
+                obj={{label: '不同意', value: 1}}
+                disabled={true}
+                onPress={()=>{}}
+            />
+            
+            </RadioButton></View>}
             
             <View style={styles.SubmitButtonCompleted}>
-                <Text>已完成投稿</Text>
+                <Text style={styles.SubmitButtonText}>已完成投稿</Text>
             </View>
             
         </ScrollView>
@@ -655,13 +696,13 @@ class Submit extends Component{
             >
                 <View style={styles.imageGroup}>
                 {this.state.image ? this.renderImage(this.state.image) : this.renderImageCamera()}
-                    <Text style={styles.imageLabel}>上傳作品</Text>
+                    <Text style={styles.imageLabel}>{'上傳作品'}</Text>
                 </View>
             </TouchableOpacity>
             <ModalSelector
                 data={data}
-                initValue="Select something yummy!"
-                supportedOrientations={['landscape']}
+                initValue=""
+                supportedOrientations={['portrait']}
                 accessible={true}
                 cancelText={'取消'}
                 scrollViewAccessibilityLabel={'Scrollable options'}
@@ -677,16 +718,17 @@ class Submit extends Component{
                 <SubmitFieldItem 
                     SubmitFieldTitle={'參賽組別'}
                     clickHander={this.onGroupClickHandler}
-                    SubmitFieldContent={this.autoAssignFunwordGroup(this.props.signIn.user)}
+                    SubmitFieldContent={(this.props.signIn.user.funwordGroup)?this.props.signIn.user.funwordGroup:this.autoAssignFunwordGroup(this.props.signIn.user)}
                     SubmitFieldPlaceholder={'auto-fill'}
                     />
             <View style={{alignSelf:'flex-start', marginLeft: 15 }}>
             <Text>       
-                {'我同意主辦單位將我的作品同步送件參加武漢木蘭草原盃比賽\n＊木蘭草原盃為大陸武漢地區辦理的書法(軟.硬筆)賽事'}
+                {'\n我同意主辦單位將我的作品同步送件參加武漢木蘭草原盃比賽\n＊木蘭草原盃為大陸武漢地區辦理的書法(軟.硬筆)賽事\n'}
             </Text>
             </View>
             
             {(this.state.initAgreement!=-1)?
+            //(this.state.draftStatus != 'notSubmitYet')?
                 <RadioForm
                 style={{ flexDirection: 'row', alignItems: 'flex-start', alignSelf:'flex-start', marginLeft: 15 }}
                 radio_props={this.radio_props}
@@ -695,7 +737,16 @@ class Submit extends Component{
                 buttonOuterSize={15}
                 labelColor={'gray'}
                 onPress={(agreement) => {this.setState({agreement:agreement})}}
-                />: null}
+                />:
+                <RadioForm
+                style={{ flexDirection: 'row', alignItems: 'flex-start', alignSelf:'flex-start', marginLeft: 15 }}
+                radio_props={this.radio_props}
+                initial={(this.state.agreement)?0:1}
+                buttonSize={10}
+                buttonOuterSize={15}
+                labelColor={'gray'}
+                onPress={(agreement) => {this.setState({agreement:agreement})}}
+                />}
 
             <TouchableOpacity 
                 style={styles.SubmitButton}
@@ -749,14 +800,14 @@ class Submit extends Component{
                 >
                     <View style={styles.imageGroup}>
                     {this.state.image ? this.renderImage(this.state.image) : this.renderImageCamera()}
-                        <Text style={styles.imageLabel}>上傳作品</Text>
+                        <Text style={styles.imageLabel}>{'上傳作品'}</Text>
                     </View>
                 </TouchableOpacity>
                 
                 <ModalSelector
                     data={data}
-                    initValue="Select something yummy!"
-                    supportedOrientations={['landscape']}
+                    initValue=""
+                    supportedOrientations={['portrait']}
                     accessible={true}
                     cancelText={'取消'}
                     scrollViewAccessibilityLabel={'Scrollable options'}
@@ -772,12 +823,12 @@ class Submit extends Component{
                 <SubmitFieldItem 
                     SubmitFieldTitle={'參賽組別'}
                     clickHander={this.onGroupClickHandler}
-                    SubmitFieldContent={this.autoAssignFunwordGroup(this.props.signIn.user)}
+                    SubmitFieldContent={(this.props.signIn.user.funwordGroup)?this.props.signIn.user.funwordGroup:this.autoAssignFunwordGroup(this.props.signIn.user)}
                     SubmitFieldPlaceholder={'auto-fill'}
                     />
                 <View style={{alignSelf:'flex-start', marginLeft: 15 }}>
                 <Text>       
-                    {'我同意主辦單位將我的作品同步送件參加武漢木蘭草原盃比賽\n＊木蘭草原盃為大陸武漢地區辦理的書法(軟.硬筆)賽事'}
+                    {'\n我同意主辦單位將我的作品同步送件參加武漢木蘭草原盃比賽\n＊木蘭草原盃為大陸武漢地區辦理的書法(軟.硬筆)賽事\n'}
                 </Text>
                 
                 </View>

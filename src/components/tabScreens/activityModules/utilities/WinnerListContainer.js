@@ -46,8 +46,10 @@ class WinnerListContainer extends Component{
             },
             headerWord: {
                 color: '#2D82C6'
-            },
-            configObjs: {},
+            }
+        }
+        this.state = {
+            configObjs: null,
             loading: true
         }
     }
@@ -84,6 +86,8 @@ class WinnerListContainer extends Component{
 
     getComposedWinnerList(){
 
+        return this.state.configObjs;
+        /*
         return(
             {
                 final: [
@@ -135,7 +139,7 @@ class WinnerListContainer extends Component{
 
                 ]
             }
-        );
+        );*/
 
     }
     getShortWinnerList(){
@@ -482,7 +486,7 @@ class WinnerListContainer extends Component{
                     </View>
                </View><View style={{height: 5}}></View>
             <ScrollView style={this.styles.winnerList}>
-               {
+               {   (this.state.configObjs)?
                    this.getWinnerListByContext().map(
                        (winner, index)=>{
                            return(
@@ -499,7 +503,7 @@ class WinnerListContainer extends Component{
                                </View>
                            );
                        }
-                   )
+                   ):<Text>loading</Text>
                }
             <View style={{height: 80}}></View>
             </ScrollView>

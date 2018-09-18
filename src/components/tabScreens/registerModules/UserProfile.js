@@ -7,6 +7,7 @@ import ModalSelector from 'react-native-modal-selector';
 import { setAppStage, saveCurrentProfile } from '../../../actions/index';
 import LLTextInput from '../activityModules/utilities/LLTextInput';
 import RegItem from './RegItem';
+import WeeblyWebView from '../activityModules/utilities/WeeblyWebView';
 
 const identationLeft = 20;
 const styles = {
@@ -192,6 +193,7 @@ class UserProfile extends Component{
         let hasName = this.state.schoolName;
         let hasType = this.state.schoolType;
         let hasLevel = this.state.schoolLevel;
+        let hasAgreement = this.state.agreement;
     }
 
     getVerifyMessage(){     
@@ -646,7 +648,10 @@ class UserProfile extends Component{
                             <Text style={styles.textInputHeaderFont}>服務條款</Text>
                         </View>
                         <View style={{flex: 1}}>        
-                        <Text>....</Text>
+                        <WeeblyWebView 
+                            source={{uri: 'https://ucampusapp.weebly.com/serviceterms.html'}} 
+                            startInLoadingState={true}/>
+                            
                         <TouchableOpacity
                             onPress={() => {
                             this.setServiceModalVisible(!this.state.serviceModalVisible);
@@ -670,14 +675,16 @@ class UserProfile extends Component{
                         <View style={styles.textInputHeader}>
                             <Text style={styles.textInputHeaderFont}>隱私權政策</Text>
                         </View>
-                        <View style={{flex: 1, flexDirection: 'column'}}>        
-                        <Text>....</Text>
+                        <View style={{flex: 1}}>        
+                        <WeeblyWebView 
+                            source={{uri: 'https://ucampusapp.weebly.com/privacy.html'}} 
+                            startInLoadingState={true}/>
                         
                         <TouchableOpacity
                             onPress={() => {
                             this.setPrivacyModalVisible(!this.state.privacyModalVisible);
                             }}>
-                            <View style={[styles.textInputHeaderConfirm, {alignSelf: 'flex-end'}]}>
+                            <View style={styles.textInputHeaderConfirm}>
                                 <Text style={styles.textInputHeaderFont}> 確定 </Text>
                             </View>
                         </TouchableOpacity>
