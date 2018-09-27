@@ -66,11 +66,40 @@ function getLastState(state){
     }
 }
 
+function getState(state, status){
+    switch(status){
+        case 'Phone':
+            return Object.assign({}, state, {
+                appStage: 'Phone',
+                appStageTitle: PhoneTitle,
+                hasLast: false,
+                hasNext: true
+            });
+        case 'Message':
+            return Object.assign({}, state, {
+                appStage: 'Message',
+                appStageTitle: MessageTitle,
+                hasLast: true,
+                hasNext: false
+            });
+        case 'Profile':
+            return Object.assign({}, state, {
+                appStage: 'Profile',
+                appStageTitle: ProfileTitle,
+                hasLast: false,
+                hasNext: true
+            });
+        default:
+            return state;
+    }
+}
+
+
 export default function (state = defaultStatus, action) {
   if (action) {
     switch (action.type) {
       case SET_REG_STAGE:
-        return action.payload;
+        return getState(state, action.payload.regStage);
       case REG_NEXT:
         return getNextState(state);
       case REG_LAST:

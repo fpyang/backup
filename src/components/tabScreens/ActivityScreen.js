@@ -11,7 +11,6 @@ import Review from './activityModules/Review';
 import NavigationBar from '../NavigationBar';
 import { activityFunword, activityAbout, activityAdmission, activityAward, activityBooks, activityGrade,
          activityGuess, activityQA, activityRegion, activityReview } from '../../images/images';
-
 const uWidth = Dimensions.get('window').width;
 const uHeight = Dimensions.get('window').height;
 const mWidth = Math.floor((uWidth-12)/3);

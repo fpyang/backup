@@ -6,6 +6,8 @@ import TitleBar from './tabDecorators/TitleBar';
 import MessageItem from './tabDecorators/MessageItem';
 import WeeblyWebView from './activityModules/utilities/WeeblyWebView';
 
+    
+
 const { width, height } = Dimensions.get('window');
 const styles = {
     messages: {
@@ -15,6 +17,7 @@ const styles = {
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'space-between',
+        alignItems: 'center',
         height: 50,
         width: width
     },
@@ -23,7 +26,10 @@ const styles = {
         width: 50,
         justifyContent: 'center',
         alignItems: 'center'
-    }
+    },
+    iconImg: {
+        
+     }
 }
 export default class MessageScreen extends Component{
     constructor(props){
@@ -71,6 +77,7 @@ export default class MessageScreen extends Component{
             loading: false,
         });
     }
+    //
     render(){
         if(this.state.messages){
             if(this.state.messages.length>0){
@@ -84,7 +91,7 @@ export default class MessageScreen extends Component{
                   onRequestClose={() => {
                     this.setModalVisible(!this.state.modalVisible);
                   }}>
-                  <View style={{flex: 1, marginTop: 22}}>
+                  <View style={{flex: 1, marginTop: 0}}>
                    
                       <View style={styles.headerBar}>
                       
@@ -92,8 +99,8 @@ export default class MessageScreen extends Component{
                         onPress={() => {
                           this.setModalVisible(!this.state.modalVisible);
                         }}>
-                        <View style={styles.iconView}>
-                            <Icon name='angle-left' size={30} color='gray' />
+                        <View style={styles.iconView}> 
+                            <Icon name='angle-left' size={30} color='gray' />    
                         </View>
                       </TouchableHighlight>
                       
@@ -131,7 +138,8 @@ export default class MessageScreen extends Component{
                 </View>);
         }else{
             return(
-            <View style={{flex: 1, marginTop: 22}}>      
+            <View style={{flex: 1, marginTop: 0}}>     
+            <TitleBar title={'訊息'}/> 
             <View style={styles.headerBar}>
             
             </View>

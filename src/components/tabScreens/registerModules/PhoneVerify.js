@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { View, Text, TouchableOpacity, TextInput } from 'react-native';
+import { View, Text, TouchableOpacity, Platform } from 'react-native';
 import { bindActionCreators } from 'redux';
 import firebase from 'react-native-firebase';
-import { regNext, regLast, setAppStage, signIn, saveCurrentProfile, setOnboardingStatus } from '../../../actions/index';
+import { regNext, regLast, setAppStage, setRegStage, signIn, saveCurrentProfile, setOnboardingStatus } from '../../../actions/index';
 import { SmsVerifyInput } from './SmsVerifyInput';
 import LLTextInput from '../activityModules/utilities/LLTextInput';
 import UserProfile from './UserProfile';
@@ -34,7 +34,9 @@ class PhoneVerify extends Component{
             validPhoneNum: '',
             phoneNumberFormValid: false,
             confirmResult: null,
-            authStateChanged: ''
+            authStateChanged: '',
+            uuser: '',
+            loginHint: ''
         }
         this.renderPhoneInput = this.renderPhoneInput.bind(this);
         this.isNumeric = this.isNumeric.bind(this);
@@ -46,47 +48,82 @@ class PhoneVerify extends Component{
         this.syncCurrentUserProfile = this.syncCurrentUserProfile.bind(this);
           
     }
+    
     componentDidMount() {
         
         this.unsubscribe = firebase.auth().onAuthStateChanged((user) => {
-          if (user) {
-            this.setState({ authStateChanged: JSON.stringify(user)});
-            this.setState({ user: user.toJSON()});
-            this.props.signIn(user);
-            this.syncCurrentUserProfile(user.uid);
-
-            this.users.where("uid", "==", user.uid).get()
-                      .then(querySnapshot => {
-                          let size = querySnapshot.size;
-                          if(size > 0){
-                              this.props.setAppStage('Login');//Skip filling user profile form
-                              //Load user-profile to app
-                              querySnapshot.forEach(documentSnapshot => {
-                                  this.props.saveCurrentProfile(documentSnapshot.data());                        
-                            });
-                          }else{
-                            //this.props.signIn(user);
-                            //this.props.regNext();//lead to user profile filling page
-                              
-                          }
-                      
-                      });
-                      
-            //this.props.setAppStage('Login');
-            //this.props.setAppStage('Registering');
-          } else {
-            // User has been signed out, reset the state
-            this.setState({
-              user: null,
-              message: '',
-              codeInput: '',
-              phoneNumber: '',
-              validPhoneNum: '',
-              phoneNumberFormValid: false,
-              confirmResult: null
-            });
-          }
-        });
+            if(user){
+              this.setState({ authStateChanged: JSON.stringify(user)});
+              this.setState({ user: user.toJSON()});
+              this.props.signIn(user);
+              this.syncCurrentUserProfile(user.uid);
+  
+              this.users.where("uid", "==", user.uid).get()
+                        .then(querySnapshot => {
+                            let size = querySnapshot.size;
+                            if(size > 0){
+                              this.setState({'loginUser': 'find_one'});
+                                this.props.setAppStage('Login');//Skip filling user profile form
+                                this.setState({'loginHint': 'has firebase uid'});
+                                //Load user-profile to app
+                                querySnapshot.forEach(documentSnapshot => {
+                                    this.props.saveCurrentProfile(documentSnapshot.data());                        
+                              });
+                            }else{
+                              this.props.signIn(user);
+                              this.props.saveCurrentProfile(user);
+                              this.setState({'uuser': user.phoneNumber, 'loginHint': 'no firebase uid'});
+  
+                              if(Platform.OS === 'ios'){
+                                if(user.phoneNumber.length > 0){
+                                      
+                                    //this.setState({'loginUser': '>0'});
+                                    
+                                    this.setState({phoneNumberFormValid: true}, ()=>{
+                                      this.props.setAppStage('Registering');
+                                        this.props.setRegStage('Profile')});
+                                    
+                                    
+                                }
+                              }
+                              if(Platform.OS === 'android'){
+                                  //this.setState({'loginHint': 'android', 'loginUser': user.uid});
+                                  if(user.phoneNumber.length > 0){
+                                      
+                                      //this.setState({'loginUser': '>0'});
+                                      
+                                      this.setState({phoneNumberFormValid: true}, ()=>{
+                                        this.props.setAppStage('Registering');
+                                          this.props.setRegStage('Profile')});
+                                      
+                                      
+                                  }else{
+                                      this.setState({'loginUser': '<0'+this.state.phoneNumber.toString()+'...'});
+                                  }
+                                  
+                              }
+                              //this.props.regNext();//lead to user profile filling page 
+                              //this.props.setAppStage('Registering')
+                              //this.props.setRegStage('Profile')//lead to user profile filling page  
+                            }
+                        
+                        });
+                        
+              //this.props.setAppStage('Login');
+              //this.props.setAppStage('Registering');
+            } else {
+              // User has been signed out, reset the state
+              this.setState({
+                user: null,
+                message: '',
+                codeInput: '',
+                phoneNumber: '',
+                validPhoneNum: '',
+                phoneNumberFormValid: false,
+                confirmResult: null
+              });
+            }
+          });
         
        
       }
@@ -187,14 +224,35 @@ class PhoneVerify extends Component{
                                   this.props.saveCurrentProfile(documentSnapshot.data());                        
                             });
                           }else{
-                              this.props.signIn(user);
-                              this.props.regNext();//lead to user profile filling page
+                                this.props.signIn(user);
+                                if(Platform.OS === 'ios'){
+                                    //this.props.regNext();
+                                    this.setState({phoneNumberFormValid: true}, ()=>{
+                                        this.props.setAppStage('Registering');
+                                          this.props.setRegStage('Profile')});
+                                }
+
+                                if(Platform.OS === 'android'){
+                                    //this.props.regNext();
+                                    this.setState({phoneNumberFormValid: true}, ()=>{
+                                        this.props.setAppStage('Registering');
+                                          this.props.setRegStage('Profile')});
+                                }
+                                /*
+                                if(Platform.OS === 'android'){
+                                    if(this.state.phoneNumber.length>0){
+                                        this.props.setAppStage('Registering')
+                                        this.props.setRegStage('Profile')//lead to user profile filling page  
+                                    }
+                                    
+                                }*/
+                              
+                              //this.props.setRegStage('Profile')//lead to user profile filling page
                           }
                       
                       });
                       
-                    })
-                    .catch(error => this.setState({ message: `Code Confirm Error: ${codeInput} ${error.message}` }));
+                    }).catch(error => this.setState({ message: `Code Confirm Error: ${codeInput} ${error.message}` }));
                 }
                 
               }
@@ -208,6 +266,7 @@ class PhoneVerify extends Component{
       saveProfile(){
           //save the profile to db
           this.userProfile.saveCurrentProfile();
+          
       }
 
     renderPhoneInput(){
@@ -241,7 +300,7 @@ class PhoneVerify extends Component{
                         justifyContent: 'center',
                         alignItems: 'center',
                         height: 50, width: '100%', borderColor: 'gray', borderWidth: 0.5}}>
-                    <View><Text>電話號碼:</Text></View>
+                    <View><Text>{'電話號碼: '}</Text></View>
                     <LLTextInput
                         underlineColorAndroid={'transparent'}
                         style={{height: '100%', width: '80%'}}
@@ -267,6 +326,8 @@ class PhoneVerify extends Component{
                         placeholder=""
                         label="VerifyCode"
                         maxLength={6}
+                        errorMsg={this.state.message}
+                        phoneNumber={this.state.phoneNumber.replace('+886', '0')}
                         inputStyle={{justifyContent: 'center', alignItems: 'center'}}
                         value={this.state.codeInput}
                         keyboardType="phone-pad"
@@ -276,7 +337,7 @@ class PhoneVerify extends Component{
                 </View>}
 
                 { this.props.regStage.appStage === 'Profile' && <UserProfile onRef={ref => (this.userProfile = ref)}/> }
-
+                
             </View>
         </View>
     );
@@ -294,8 +355,13 @@ class PhoneVerify extends Component{
         //Set logout mechanism
        // <Text>{JSON.stringify(this.state.message)}</Text>
        // <Text>authStateChanged: {this.state.authStateChanged}</Text>
+       /*
+       <Text>{JSON.stringify(this.state.message)}</Text>
+       <Text>{JSON.stringify(this.state.uuser)}</Text>
+       <Text>{'qq '}{this.props.regStage.appStage}{' ww-loginHint: '}{this.state.loginHint}</Text>
+       */
         return (
-            <View style={styles.page}>
+            <View style={styles.page}>  
                 {this.renderPhoneInput()}       
             </View>
         )
@@ -304,7 +370,7 @@ class PhoneVerify extends Component{
 
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({ regNext, regLast, setAppStage, signIn, saveCurrentProfile, setOnboardingStatus }, dispatch);
+    return bindActionCreators({ regNext, regLast, setAppStage, signIn, saveCurrentProfile, setOnboardingStatus, setRegStage }, dispatch);
   }
   
   

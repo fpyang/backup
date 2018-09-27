@@ -5,6 +5,7 @@ export const activityBooks = require('./activity/books.png');
 export const activityGrade = require('./activity/grade.png');
 export const activityGuess = require('./activity/guess.png');
 export const activityQA = require('./activity/qa.png');
+export const activityMsg = require('./activity/msgIcon.png');
 export const activityRegion = require('./activity/region.png');
 export const activityReview = require('./activity/review.png');
 export const activityFunword = require('./activity/funword.png');

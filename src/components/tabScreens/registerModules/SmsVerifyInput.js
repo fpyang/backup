@@ -1,5 +1,5 @@
 import React from 'react';
-import { TextInput, View, Text, Dimensions} from 'react-native';
+import { TextInput, Platform, View, Text, Dimensions} from 'react-native';
 import LLTextInput from '../activityModules/utilities/LLTextInput';
 
 const screenWidth = Dimensions.get('window').width;
@@ -29,10 +29,15 @@ const styles = {
     marginRight: 5
   },
   containerStyle: {
-    height: commonHeight,
+    height: 0,
     width: commonWidth,
-    flex: 1,
     flexDirection: 'row',
+    alignItems: 'center'
+  },
+  background: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
     alignItems: 'center'
   }
 };
@@ -200,32 +205,85 @@ const CodeRender = ({value}) => {
   }
 }
 
-const SmsVerifyInput = ({ value, onChangeText, placeholder, secureTextEntry, maxLength, keyboardType }) => {
-  const { inputStyle, containerStyle } = styles;
- 
-  return (
-    <View>
-    <View style={containerStyle}>
-      <View style={styles.textStyle}>
-        <CodeRender value={value}/>
+const SmsVerifyInput = ({ errorMsg, phoneNumber, value, onChangeText, placeholder, secureTextEntry, maxLength, keyboardType }) => {
+  if(Platform.OS === 'ios'){
+
+    return (
+      <View style={styles.background}>
+      <Text>{'驗證碼已發送至\n'}</Text>
+      <Text>{phoneNumber}</Text>
+      <View style={styles.containerStyle}> 
+        <View style={styles.textStyle}>
+          <CodeRender value={value}/>
+        </View>
+        <LLTextInput
+          underlineColorAndroid={'transparent'}
+          secureTextEntry={secureTextEntry}
+          placeholder={placeholder}
+          autoCorrect={false}
+          style={styles.inputStyle}
+          value={value}
+          autoFocus={true}
+          underlineColorAndroid='rgba(0,0,0,0)'
+          selectionColor="transparent"
+          maxLength={maxLength}
+          keyboardType={keyboardType}
+          onChangeText={onChangeText}
+        />
+        
       </View>
-      <LLTextInput
-        underlineColorAndroid={'transparent'}
-        secureTextEntry={secureTextEntry}
-        placeholder={placeholder}
-        autoCorrect={false}
-        style={styles.inputStyle}
-        value={value}
-        autoFocus={true}
-        underlineColorAndroid='rgba(0,0,0,0)'
-        selectionColor="transparent"
-        maxLength={maxLength}
-        keyboardType={keyboardType}
-        onChangeText={onChangeText}
-      />
-    </View>
-    </View>
-  );
+
+      <View style={{height: ((screenWidth-120)/6)*1.5+60, background: 'transparent',display: 'flex', justifyContent: 'center', alignItems: 'center'}}></View>
+    <Text>{'簡訊驗證碼為六位數字\n'}</Text>
+    <Text>{'若您未收到驗證碼，請確認電話號碼是否正確'}</Text>
+    
+      </View>
+    );
+
+
+  }
+
+  if(Platform.OS === 'android'){
+
+    return (
+      <View style={styles.background}>
+      <View style={styles.containerStyle}>
+        <View style={styles.textStyle}>
+          <CodeRender value={value}/>
+        </View>
+        <LLTextInput
+          underlineColorAndroid={'transparent'}
+          secureTextEntry={secureTextEntry}
+          placeholder={placeholder}
+          autoCorrect={false}
+          style={styles.inputStyle}
+          value={value}
+          autoFocus={true}
+          underlineColorAndroid='rgba(0,0,0,0)'
+          selectionColor="transparent"
+          maxLength={maxLength}
+          keyboardType={keyboardType}
+          onChangeText={onChangeText}
+        />
+        
+      </View>
+    
+      </View>
+    );
+
+    
+  }
+
+  
 };
+/*
+ <Text>{'驗證碼已發送至\n'}</Text>
+      <Text>{phoneNumber}</Text>
+*/
+/*
+  <View style={{height: ((screenWidth-120)/6)*1.5+60, background: 'transparent',display: 'flex', justifyContent: 'center', alignItems: 'center'}}></View>
+    <Text>{'簡訊驗證碼為六位數字\n'}</Text>
+    <Text>{'若您未收到驗證碼，請確認電話號碼是否正確'}</Text>
+*/
 
 export { SmsVerifyInput };
