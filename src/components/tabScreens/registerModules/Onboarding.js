@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { View, Text, TouchableOpacity, Image, Dimensions } from 'react-native';
+import { View, Text, TouchableOpacity, Image, Dimensions, Platform } from 'react-native';
 import { bindActionCreators } from 'redux';
 import Swiper from 'react-native-swiper';
 import { setAppStage } from '../../../actions/index';
@@ -113,39 +113,79 @@ class OnBoarding extends Component{
         }
       }
     render(){
-        return(
-            <View style={{flex: 1, backgroundColor: 'white'}}>
-            <Swiper 
-                containerStyle={styles.wrapper} 
-                showsButtons={true}
-                onMomentumScrollEnd={this._onMomentumScrollEnd}
-                nextButton={<Text style={styles.controlText}>›</Text>}
-                prevButton={<Text style={styles.controlText}>‹</Text>}
-            >
-                <View style={styles.slide1}>
-                <Image style={styles.iconImg} source={onboarding01}/>
-                <Text style={styles.text1}>聯合盃精彩賽事，一手掌握</Text>
-                <Text style={styles.text1s}>賽區資訊、考題回顧、寫作秘笈、及時入手</Text>
-                </View>
-                <View style={styles.slide2}>
-                <Image style={styles.iconImg} source={onboarding02}/>
-                <Text style={styles.text2}>特別賽事，創意玩字大賽</Text>
-                <Text style={styles.text2s}>寫字、拍照、上傳、投票，等你來挑戰</Text>
-                </View>
-                <View style={styles.slide3}>
-                <Image style={styles.iconImg} source={onboarding03}/>
-                <Text style={styles.text3}>學習，就從uCampus開始</Text>
-                <Text style={styles.text3s}>寫作、閱讀、活動、競賽，多元有趣的學習服務</Text>
-                </View>
-            </Swiper>
-            <TouchableOpacity 
-                style={[styles.buttonStyle, {backgroundColor: this.state.buttonColor}]}
-                onPress={()=>{this.props.setAppStage('Registering')}}>
-                <Text style={styles.buttonText}>進入</Text>
-            </TouchableOpacity>
-              <Text style={styles.buttonText}>margin~</Text>
-            </View> 
-            );
+        if(Platform.OS === 'android'){
+            return(
+                <View style={{flex: 1, backgroundColor: 'white'}}>
+                <Swiper 
+                    containerStyle={styles.wrapper} 
+                    showsButtons={true}
+                    onMomentumScrollEnd={this._onMomentumScrollEnd}
+                    nextButton={<Text style={styles.controlText}>›</Text>}
+                    prevButton={<Text style={styles.controlText}>‹</Text>}
+                >
+                    <View style={styles.slide1}>
+                    <Image style={styles.iconImg} source={onboarding01}/>
+                    <Text style={styles.text1}>聯合盃精彩賽事，一手掌握</Text>
+                    <Text style={styles.text1s}>賽區資訊、考題回顧、寫作秘笈、及時入手</Text>
+                    </View>
+                    <View style={styles.slide2}>
+                    <Image style={styles.iconImg} source={onboarding02}/>
+                    <Text style={styles.text2}>特別賽事，創意玩字大賽</Text>
+                    <Text style={styles.text2s}>寫字、拍照、上傳、投票，等你來挑戰</Text>
+                    </View>
+                    <View style={styles.slide3}>
+                    <Image style={styles.iconImg} source={onboarding03}/>
+                    <Text style={styles.text3}>學習，就從uCampus開始</Text>
+                    <Text style={styles.text3s}>寫作、閱讀、活動、競賽，多元有趣的學習服務</Text>
+                    </View>
+                </Swiper>
+                <TouchableOpacity 
+                    style={[styles.buttonStyle, {backgroundColor: this.state.buttonColor}]}
+                    onPress={()=>{this.props.setAppStage('Registering')}}>
+                    <Text style={styles.buttonText}>進入</Text>
+                </TouchableOpacity>
+                  <Text style={styles.buttonText}>margin~</Text>
+                </View> 
+                );
+        }
+
+        if(Platform.OS === 'ios'){
+            return(
+                <View style={{flex: 1, backgroundColor: 'white'}}>
+                <Swiper 
+                    containerStyle={styles.wrapper} 
+                    showsButtons={true}
+                    width={width}
+                    onMomentumScrollEnd={this._onMomentumScrollEnd}
+                    nextButton={<Text style={styles.controlText}>›</Text>}
+                    prevButton={<Text style={styles.controlText}>‹</Text>}
+                >
+                    <View style={styles.slide1}>
+                    <Image style={styles.iconImg} source={onboarding01}/>
+                    <Text style={styles.text1}>聯合盃精彩賽事，一手掌握</Text>
+                    <Text style={styles.text1s}>賽區資訊、考題回顧、寫作秘笈、及時入手</Text>
+                    </View>
+                    <View style={styles.slide2}>
+                    <Image style={styles.iconImg} source={onboarding02}/>
+                    <Text style={styles.text2}>特別賽事，創意玩字大賽</Text>
+                    <Text style={styles.text2s}>寫字、拍照、上傳、投票，等你來挑戰</Text>
+                    </View>
+                    <View style={styles.slide3}>
+                    <Image style={styles.iconImg} source={onboarding03}/>
+                    <Text style={styles.text3}>學習，就從uCampus開始</Text>
+                    <Text style={styles.text3s}>寫作、閱讀、活動、競賽，多元有趣的學習服務</Text>
+                    </View>
+                </Swiper>
+                <TouchableOpacity 
+                    style={[styles.buttonStyle, {backgroundColor: this.state.buttonColor}]}
+                    onPress={()=>{this.props.setAppStage('Registering')}}>
+                    <Text style={styles.buttonText}>{'進入'+this.state.swiperIndex.toString()}</Text>
+                </TouchableOpacity>
+                  <Text style={styles.buttonText}>margin~</Text>
+                </View> 
+                );
+        }
+        
 
     }
     
