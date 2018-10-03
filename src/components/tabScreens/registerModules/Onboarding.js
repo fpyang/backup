@@ -179,7 +179,7 @@ class OnBoarding extends Component{
                 <TouchableOpacity 
                     style={[styles.buttonStyle, {backgroundColor: this.state.buttonColor}]}
                     onPress={()=>{this.props.setAppStage('Registering')}}>
-                    <Text style={styles.buttonText}>{'進入'+this.state.swiperIndex.toString()}</Text>
+                    <Text style={styles.buttonText}>{'進入'}</Text>
                 </TouchableOpacity>
                   <Text style={styles.buttonText}>margin~</Text>
                 </View> 

@@ -384,6 +384,7 @@ class Submit extends Component{
                                 this.setState({uploadedFile: uploadedFile});
                                 //upload data to server, over-write a doc 
                                 //add a doc to Cloud FireStore
+                                //TODO: check if existing draft first
                                 this.funword.add({
                                     author: this.props.signIn.user.uid,
                                     title: this.state.selectedTitle,

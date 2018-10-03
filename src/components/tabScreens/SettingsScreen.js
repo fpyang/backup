@@ -560,7 +560,7 @@ class SettingsScreen extends Component{
                         
                         <View style={{height: 50, justifyContent: 'flex-end', padding: 5}}>
                             <Text>
-                            學生姓名 ＊若要查詢聯合盃成績請務必填寫真實姓名 
+                            學生姓名 ＊請務必填寫真實姓名及學校以利未來個人學習歷程紀錄與查詢 
                             </Text>
                            
                         </View>

@@ -84,11 +84,11 @@ const styles = {
     },
     selectedSmallText: {
         color: 'white',
-        fontSize: 16
+        fontSize: 14
     },
     unselectedSmallText: {
         color: 'black',
-        fontSize: 16
+        fontSize: 14
     },
     selectedScoreText: {
         color: 'white',
