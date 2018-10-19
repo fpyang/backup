@@ -39,6 +39,9 @@ const styles = {
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center'
+  },
+  textFont:{
+    fontSize: 16
   }
 };
 
@@ -210,7 +213,7 @@ const SmsVerifyInput = ({ errorMsg, phoneNumber, value, onChangeText, placeholde
 
     return (
       <View style={styles.background}>
-      <Text>{'驗證碼已發送至\n'}</Text>
+      <Text style={styles.textFont}>{'驗證碼已發送至\n'}</Text>
       <Text>{phoneNumber}</Text>
       <View style={styles.containerStyle}> 
         <View style={styles.textStyle}>
@@ -234,8 +237,8 @@ const SmsVerifyInput = ({ errorMsg, phoneNumber, value, onChangeText, placeholde
       </View>
 
       <View style={{height: ((screenWidth-120)/6)*1.5+60, background: 'transparent',display: 'flex', justifyContent: 'center', alignItems: 'center'}}></View>
-    <Text>{'簡訊驗證碼為六位數字\n'}</Text>
-    <Text>{'若您未收到驗證碼，請確認電話號碼是否正確'}</Text>
+    <Text style={styles.textFont}>{'簡訊驗證碼為六位數字\n'}</Text>
+    <Text style={styles.textFont}>{'若您未收到驗證碼，請確認電話號碼是否正確'}</Text>
     
       </View>
     );

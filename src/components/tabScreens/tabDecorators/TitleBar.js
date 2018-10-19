@@ -18,8 +18,8 @@ export default class TitleBar extends Component{
         if(Platform.OS == 'ios'){
             return(
                 <View>
-                    <View style={{height: 26, backgroundColor: 'white'}}></View>
-                    <View style={styles.bar}>
+                    <View style={{height: 66, backgroundColor: 'white'}}></View>
+                    <View style={[styles.bar, {marginTop: 30}]}>
                         <Text style={{fontSize: 16, fontWeight: 'bold'}}> {this.props.title} </Text>
                     </View>
                 </View>

@@ -4,6 +4,7 @@ import ProgressBarAnimated from 'react-native-progress-bar-animated';
 import firebase from 'react-native-firebase';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { connect } from 'react-redux';
+import ActionSheet from 'react-native-actionsheet';
 import LLTextInput from '../utilities/LLTextInput';
 
 import VoteItem from './VoteItem';
@@ -20,6 +21,20 @@ const styles = {
       alignItems: 'center',
       marginTop: 20
     },
+    notOpen: {
+        display: 'flex',
+        backgroundColor: 'white',
+        alignItems: 'center',
+        justification: 'center',
+        marginTop: 20,
+        width: width,
+        height: height
+      },
+      notOpenText: {
+        marginTop: height/2-50,
+        alignItems: 'center',
+        justification: 'center'
+      },
     searchBarContainer: {
         width: '100%',
         flexDirection: 'row',
@@ -87,30 +102,71 @@ class Vote extends Component{
             initVote: 0,
             todayVote: 0,
             searchTerms: '',
-            searching: ''
+            searching: '',
+            loading: true,
+            startYet: null,
+            configObjs: null,
+            actionSheetIndex: -1
         }
         this.funword = firebase.firestore().collection('funword');
         this.votes = firebase.firestore().collection('votes');
         this.users = firebase.firestore().collection('users');
+        
         this.onCollectionUpdate = this.onCollectionUpdate.bind(this);
         this.onVotesUpdate = this.onVotesUpdate.bind(this);
         this.autoAssignFunwordGroup = this.autoAssignFunwordGroup.bind(this);
         this.initVote = this.initVote.bind(this);
-        this.filtering = this.filtering.bind(this);
-        
+        this.filtering = this.filtering.bind(this);  
         this.searching = this.searching.bind(this);
+        this.showActionSheet = this.showActionSheet.bind(this);
+        this.orderByHotness = this.orderByHotness.bind(this);
+        this.orderByTime = this.orderByTime.bind(this)
+        this.orderInTime = this.orderInTime.bind(this);
+        
     }
     componentDidMount() {
         this.unsubscribe = this.funword.onSnapshot(this.onCollectionUpdate);
         this.unsubscribeVote = this.votes.onSnapshot(this.onVotesUpdate);
+    }
+    componentWillMount(){
+
+        fetch(('https://ucampus-89e65.firebaseapp.com/static/json/configs.json'), {
+            method: 'GET'}).then((response) => {
+              if (response.status === 200) {
+                response.json().then(json => {
+                                      this.setState(Object.assign({}, this.state, {'configObjs': json, 'loading': false}));
+                                      let startDay = new Date(json.activities.funword.startDate);
+                                        let today = new Date();
+                                        let startYet = (today > startDay);//FIXME: for test, production's today should be less than startDay
+                                        this.setState({startYet});
+                                    });
+              } else {
+                //console.log(response.status);
+              }
+            })
+            .catch((error) => {
+              //console.log(error);
+            });
     }
     componentWillUnmount() {
         if (this.unsubscribe) this.unsubscribe();
         if (this.unsubscribeVote) this.unsubscribe();
         this.initVote();
     }
+
     initVote(){
            
+    }
+    orderByHotness(){
+
+    }
+
+    orderByTime(){
+
+    }
+
+    orderInTime(){
+
     }
     searching(){
         this.setState({searching: this.state.searchTerms});
@@ -132,6 +188,9 @@ class Vote extends Component{
             
         }
         
+    }
+    showActionSheet(){
+        this.ActionSheet.show();
     }
 
     onVotesUpdate(querySnapshot){
@@ -304,10 +363,42 @@ class Vote extends Component{
           <Text>{`票，共投`}</Text>
           <Text>{`${this.state.progress}`}</Text>
     <Text>{`票`}</Text>
+    //-------------
+
+    <TouchableOpacity 
+                onPress={this.showActionSheet}>
+                    <Text>{'click me!'}</Text>
+                </TouchableOpacity>
+                <Text>{this.state.actionSheetIndex}</Text>
     */
     render(){
         return(
-            <View style={styles.submit}>
+            <View>
+                
+                <ActionSheet
+                ref={o => this.ActionSheet = o}
+                title={'上傳你的作品'}
+                options={['熱門', '最新', '隨機', '取消']}
+                cancelButtonIndex={3}
+                onPress={(index) => { 
+                    switch(index){
+                        case 0:
+                            this.orderByHotness();     
+                            break;
+                        case 1:
+                            this.orderByTime();
+                            break;
+                        case 2:
+                            this.orderInRandom();
+                            break;
+                        default:
+                            this.orderByTime();
+                            break;
+                    }
+                    }}
+                />
+                
+            {this.state.startYet && <View style={styles.submit}>
             <View style={styles.progressBar}>
             <ProgressBarAnimated
                 width={width*0.9}
@@ -346,7 +437,14 @@ class Vote extends Component{
                     />
                 </ScrollView>
 
+            </View>}
+            {!this.state.startYet && <View style={styles.notOpen}>
+            <View style={styles.notOpenText}>
+            <Text> {(this.state.configObjs)?this.state.configObjs.activities.funword.prompt:'loading'} </Text>
             </View>
+            </View>}
+            </View>
+            
             
         )
     }

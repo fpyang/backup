@@ -28,7 +28,7 @@ const styles = {
     itemThumbnail: {
         height: 70,// / PixelRatio.get(),
         width: 70,// / PixelRatio.get(),
-        backgroundColor: 'black'
+        backgroundColor: 'white'
     },
     itemContent: {
         height: 80,// / PixelRatio.get(),

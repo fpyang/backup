@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, ScrollView, Dimensions } from 'react-native';
 import TitleBar from '../tabDecorators/TitleBar';
 import LevelSelector from './utilities/LevelSelector';
 import WinnerListItem from './utilities/WinnerListItem';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { selectLevel } from '../../../actions/index';
-
+const { height } = Dimensions.get('window');
 const grayBackground = '#F1F1F1';
 const styles = {
     content: {
@@ -14,19 +14,40 @@ const styles = {
         backgroundColor: grayBackground
     },
     levels: {
-        flex: 1.2,
+        height: 0.25*height,
         backgroundColor: grayBackground
     },
     regions: {
-        flex: 4,
+        height: 0.75*height,
         backgroundColor: '#F1F1F1'
     }
 }
 class Award extends Component{
     constructor(props){
         super(props);
+        this.state = {
+            configObjs: null,
+            loading: true
+        }
+    }
+    componentWillMount(){
+
+        fetch(('https://ucampus-89e65.firebaseapp.com/static/json/award.json'), {
+            method: 'GET'}).then((response) => {
+              if (response.status === 200) {
+                response.json().then(json => {
+                                      this.setState(Object.assign({}, this.state, {'configObjs': json, 'loading': false}));
+                                    });
+              } else {
+                //console.log(response.status);
+              }
+            })
+            .catch((error) => {
+              //console.log(error);
+            });
     }
     render(){
+        /*
         let configObjs=[
             [
                 {
@@ -166,7 +187,7 @@ class Award extends Component{
                 }
             ]
 
-        ]
+        ]*/
         if("awardLevel" in this.props.selectedLevel){
             //pass
         }else{
@@ -182,15 +203,15 @@ class Award extends Component{
                 <View style={styles.levels}>
                   <LevelSelector />
                 </View>
-                <View style={styles.regions}>                
-                    { 
-                      configObjs[Number(this.props.selectedLevel.awardLevel)-1].map(
+                <ScrollView style={styles.regions}>                
+                    { (this.state.configObjs)?
+                      this.state.configObjs[Number(this.props.selectedLevel.awardLevel)-1].map(
                           (configObj, index)=>{
                               return (<WinnerListItem {...this.props} {...configObj} key={index}/>);
                           }
-                      )
+                      ):<Text>loading</Text>
                     }
-                </View>
+                </ScrollView>
             </View>
         </View>);
     }

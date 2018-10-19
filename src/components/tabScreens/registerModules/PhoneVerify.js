@@ -6,6 +6,7 @@ import firebase from 'react-native-firebase';
 import { regNext, regLast, setAppStage, setRegStage, signIn, saveCurrentProfile, setOnboardingStatus } from '../../../actions/index';
 import { SmsVerifyInput } from './SmsVerifyInput';
 import LLTextInput from '../activityModules/utilities/LLTextInput';
+import Touchable from '../activityModules/utilities/Touchable';
 import UserProfile from './UserProfile';
 
 const styles = {
@@ -16,11 +17,16 @@ const styles = {
     },
     bar: {
         display: 'flex',
-        height: 50,
         flexDirection: 'row',
         backgroundColor: 'white',
         alignItems: 'center',
         justifyContent: 'space-between'
+    },
+    barIos: {
+        height: 90
+    },
+    barAndroid: {
+        height: 50
     }
 }
 class PhoneVerify extends Component{
@@ -272,19 +278,19 @@ class PhoneVerify extends Component{
     renderPhoneInput(){
         return(
         <View style={{flex: 1}}>
-            <View style={styles.bar}>
+            <View style={[styles.bar, (Platform.OS === 'ios')?styles.barIos:styles.barAndroid]}>
                 {this.props.regStage.hasLast && 
                 <TouchableOpacity onPress={()=>{this.props.regLast()}}
                 ><Text style={{fontSize: 18, fontWeight: 'bold'}}> {'電話驗證'} </Text></TouchableOpacity>}
                 
                 {!this.props.regStage.hasLast && <Text style={{fontSize: 18, color: 'transparent'}}> {'電話驗證'} </Text>}
-                <Text style={{fontSize: 18, fontWeight: 'bold'}}> {this.props.regStage.appStageTitle} </Text>
+                <Text style={{fontSize: 18, fontWeight: 'bold'}}> {this.props.regStage.appStageTitle } </Text>
                 
                 {(this.props.regStage.hasNext && this.state.phoneNumberFormValid) &&
-                <TouchableOpacity onPress={()=>{
+                <Touchable onPress={()=>{
                     this.nextStep();
                 }}
-                ><Text style={{fontSize: 18, fontWeight: 'bold', color: '#2D82C6'}}> {'下一步'} </Text></TouchableOpacity>}
+                ><Text style={{fontSize: 18, fontWeight: 'bold', color: '#2D82C6'}}> {'下一步'} </Text></Touchable>}
                 {(this.props.regStage.hasNext && !this.state.phoneNumberFormValid) &&
                 <TouchableOpacity onPress={()=>{}}
                 ><Text style={{fontSize: 18, fontWeight: 'bold', color: 'gray'}}> {'下一步'} </Text></TouchableOpacity>}

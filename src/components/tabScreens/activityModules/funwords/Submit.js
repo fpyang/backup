@@ -198,6 +198,7 @@ class Submit extends Component{
         this.renderDraftPage = this.renderDraftPage.bind(this);
         this.setModalVisible = this.setModalVisible.bind(this);
         this.renderBigImage = this.renderBigImage.bind(this);
+
         this.haveSubmited();    
     }
     componentDidMount() {
@@ -366,7 +367,10 @@ class Submit extends Component{
                                 draftStatus: 'draft'
                             }).then((value)=>{
                                 //this.haveSubmited();
+                                
                                 this.setState({submitted: true});
+                                this.setState({draftStatus: 'draft'});
+                                this.setState({initAgreement: this.state.agreement?0:1});
                             });                
                         })
                         .catch(err => {
@@ -384,7 +388,6 @@ class Submit extends Component{
                                 this.setState({uploadedFile: uploadedFile});
                                 //upload data to server, over-write a doc 
                                 //add a doc to Cloud FireStore
-                                //TODO: check if existing draft first
                                 this.funword.add({
                                     author: this.props.signIn.user.uid,
                                     title: this.state.selectedTitle,
@@ -445,26 +448,43 @@ class Submit extends Component{
             [
             {text: '儲存草稿', onPress: () => {
                 this.setState({draftStatus: 'draft'});
+                firebase.storage()
+                        .ref(`/user/${this.props.signIn.user.uid}/funword/submit.jpg`)
+                        .putFile(this.state.image.uri.replace('file:/',''))
+                        .then(uploadedFile => {
+                            //success
+                            this.setState({uploadedFile: uploadedFile});
                 this.funword.doc(this.state.docid).set({
                     title: this.state.selectedTitle,
                     agreement: this.state.agreement,
                     author: this.props.signIn.user.uid,
                     draftStatus: 'draft',
                     group: this.state.autoGroup,
-                    imageURL: this.state.image.uri   
+                    imageURL: uploadedFile.downloadURL   
                   }).then(
                       ()=>{this.setState({submitted: true});}
                   );
+                })
+                .catch(err => {
+                    //Error
+                    this.setState({error: err});
+                });
             }},
             {text: '確定投稿', onPress: () => {
                 this.setState({draftStatus: 'submitted'});
+                firebase.storage()
+                        .ref(`/user/${this.props.signIn.user.uid}/funword/submit.jpg`)
+                        .putFile(this.state.image.uri.replace('file:/',''))
+                        .then(uploadedFile => {
+                            //success
+                            this.setState({uploadedFile: uploadedFile});
                 this.funword.doc(this.state.docid).set({
                     title: this.state.selectedTitle,
                     agreement: this.state.agreement,
                     author: this.props.signIn.user.uid,
                     draftStatus: 'submitted',
                     group: this.state.autoGroup,
-                    imageURL: this.state.image.uri   
+                    imageURL: uploadedFile.downloadURL  
                   }).then(
                       ()=>{
                           //this.haveSubmited();
@@ -483,6 +503,11 @@ class Submit extends Component{
                                                   
                     }
                   );
+                })
+                .catch(err => {
+                    //Error
+                    this.setState({error: err});
+                });
             }},
             ],
             { cancelable: false }
@@ -525,6 +550,7 @@ class Submit extends Component{
             }
         }
     }
+
 
     renderSubmittedPage(){
         let radio_props=[
@@ -727,13 +753,14 @@ class Submit extends Component{
                 {'\n我同意主辦單位將我的作品同步送件參加武漢木蘭草原盃比賽\n＊木蘭草原盃為大陸武漢地區辦理的書法(軟.硬筆)賽事\n'}
             </Text>
             </View>
-            
-            {(this.state.initAgreement!=-1)?
+
+                {(this.state.agreement!=null)&&(this.state.initAgreement!=-1)?
+                //<Text>{(this.state.agreement===true)?0:1}</Text>:<Text>{(this.state.agreement===true)?0+'ww':1+'ww'}</Text>
             //(this.state.draftStatus != 'notSubmitYet')?
                 <RadioForm
                 style={{ flexDirection: 'row', alignItems: 'flex-start', alignSelf:'flex-start', marginLeft: 15 }}
                 radio_props={this.radio_props}
-                initial={this.state.initAgreement}
+                initial={(this.state.agreement===true)?0:1}
                 buttonSize={10}
                 buttonOuterSize={15}
                 labelColor={'gray'}
@@ -742,7 +769,7 @@ class Submit extends Component{
                 <RadioForm
                 style={{ flexDirection: 'row', alignItems: 'flex-start', alignSelf:'flex-start', marginLeft: 15 }}
                 radio_props={this.radio_props}
-                initial={(this.state.agreement)?0:1}
+                initial={(this.state.agreement===true)?0:1}
                 buttonSize={10}
                 buttonOuterSize={15}
                 labelColor={'gray'}
@@ -752,7 +779,7 @@ class Submit extends Component{
             <TouchableOpacity 
                 style={styles.SubmitButton}
                 onPress={this.submitWork}>
-                <Text style={styles.SubmitButtonText}>投稿</Text>
+                <Text style={styles.SubmitButtonText}>{'投稿'}</Text>
             </TouchableOpacity>
 
             <ActionSheet
@@ -763,10 +790,10 @@ class Submit extends Component{
                 onPress={(index) => { 
                     switch(index){
                         case 0:
-                            this.uploadImageFromCamera();     
+                            this.uploadImageFromCamera();      
                             break;
                         case 1:
-                            this.uploadImageFromImagePicker();
+                            this.uploadImageFromImagePicker();  
                             break;
                         default:
                             break;

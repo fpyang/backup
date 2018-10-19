@@ -39,8 +39,8 @@ class RegisterPage extends Component{
             return(
                 <View>
                     <View style={{height: 22, backgroundColor: 'white'}}></View>
-                    <View style={styles.bar}>
-                        <Text style={{fontSize: 18, fontWeight: 'bold'}}> {this.props.title} </Text>
+                    <View style={[styles.bar, {marginTop: 30}]}>
+                        <Text style={{fontSize: 18, fontWeight: 'bold'}}> {this.props.title+'ios'} </Text>
                     </View>
                     <View style={styles.page}>
                     <UserProfile />
