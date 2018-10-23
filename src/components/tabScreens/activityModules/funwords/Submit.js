@@ -472,42 +472,71 @@ class Submit extends Component{
             }},
             {text: '確定投稿', onPress: () => {
                 this.setState({draftStatus: 'submitted'});
-                firebase.storage()
-                        .ref(`/user/${this.props.signIn.user.uid}/funword/submit.jpg`)
-                        .putFile(this.state.image.uri.replace('file:/',''))
-                        .then(uploadedFile => {
-                            //success
-                            this.setState({uploadedFile: uploadedFile});
-                this.funword.doc(this.state.docid).set({
-                    title: this.state.selectedTitle,
-                    agreement: this.state.agreement,
-                    author: this.props.signIn.user.uid,
-                    draftStatus: 'submitted',
-                    group: this.state.autoGroup,
-                    imageURL: uploadedFile.downloadURL  
-                  }).then(
-                      ()=>{
-                          //this.haveSubmited();
-                          if(this.props.signIn.user.funwordGroup==null){
-                            let submittedGroup = this.autoAssignFunwordGroup(this.props.signIn.user);
-                            let user = {...this.props.signIn.user, funwordGroup: submittedGroup} 
-                             //over-write a doc 
-                             this.users.doc(this.props.signIn.user.uid).set(
-                                 user
-                             );
-  
-                             this.setState({submitted: true});  
-                             //move to the next step
-                           this.props.saveCurrentProfile(user); 
-                          }
-                                                  
-                    }
-                  );
-                })
-                .catch(err => {
-                    //Error
-                    this.setState({error: err});
-                });
+                if(this.state.image.uri.includes('submit.jpg')&&(this.state.image.uri.includes('https'))){
+                    this.funword.doc(this.state.docid).set({
+                        title: this.state.selectedTitle,
+                        agreement: this.state.agreement,
+                        author: this.props.signIn.user.uid,
+                        draftStatus: 'submitted',
+                        group: this.state.autoGroup,
+                        imageURL: this.state.image.uri  
+                      }).then(
+                          ()=>{
+                              //this.haveSubmited();
+                              if(this.props.signIn.user.funwordGroup==null){
+                                let submittedGroup = this.autoAssignFunwordGroup(this.props.signIn.user);
+                                let user = {...this.props.signIn.user, funwordGroup: submittedGroup} 
+                                 //over-write a doc 
+                                 this.users.doc(this.props.signIn.user.uid).set(
+                                     user
+                                 );
+      
+                                 this.setState({submitted: true});  
+                                 //move to the next step
+                               this.props.saveCurrentProfile(user); 
+                              }
+                                                      
+                        }
+                      );
+                }else{
+                    firebase.storage()
+                    .ref(`/user/${this.props.signIn.user.uid}/funword/submit.jpg`)
+                    .putFile(this.state.image.uri.replace('file:/',''))
+                    .then(uploadedFile => {
+                        //success
+                        this.setState({uploadedFile: uploadedFile});
+            this.funword.doc(this.state.docid).set({
+                title: this.state.selectedTitle,
+                agreement: this.state.agreement,
+                author: this.props.signIn.user.uid,
+                draftStatus: 'submitted',
+                group: this.state.autoGroup,
+                imageURL: uploadedFile.downloadURL  
+              }).then(
+                  ()=>{
+                      //this.haveSubmited();
+                      if(this.props.signIn.user.funwordGroup==null){
+                        let submittedGroup = this.autoAssignFunwordGroup(this.props.signIn.user);
+                        let user = {...this.props.signIn.user, funwordGroup: submittedGroup} 
+                         //over-write a doc 
+                         this.users.doc(this.props.signIn.user.uid).set(
+                             user
+                         );
+
+                         this.setState({submitted: true});  
+                         //move to the next step
+                       this.props.saveCurrentProfile(user); 
+                      }
+                                              
+                }
+              );
+            })
+            .catch(err => {
+                //Error
+                this.setState({error: err});
+            });
+                }
+                
             }},
             ],
             { cancelable: false }

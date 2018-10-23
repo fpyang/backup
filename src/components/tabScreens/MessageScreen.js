@@ -34,7 +34,7 @@ const styles = {
 export default class MessageScreen extends Component{
     constructor(props){
         super(props);
-        this.messages = firebase.firestore().collection('messages');
+        this.messages = firebase.firestore().collection('messages').orderBy('date', 'desc');
         this.onMessagesUpdate = this.onMessagesUpdate.bind(this);
         this.setModalVisible = this.setModalVisible.bind(this);
         this.state = {
