@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
-import { Dimensions, View, Text, FlatList, ScrollView, Modal, TouchableHighlight, WebView } from 'react-native';
+import { Dimensions, View, Text, FlatList, ScrollView, Modal, TouchableHighlight, WebView, StatusBar } from 'react-native';
 import firebase from 'react-native-firebase';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import TitleBar from './tabDecorators/TitleBar';
 import MessageItem from './tabDecorators/MessageItem';
 import WeeblyWebView from './activityModules/utilities/WeeblyWebView';
+import {isIphoneX} from './activityModules/utilities/ScreenUtil';
 
-    
-
+const STATUSBAR_HEIGHT = Platform.OS === 'ios' ?(isIphoneX()?44:20):0;//StatusBar.currentHeight
 const { width, height } = Dimensions.get('window');
 const styles = {
     messages: {
@@ -93,7 +93,7 @@ export default class MessageScreen extends Component{
                   }}>
                   <View style={{flex: 1, marginTop: 0}}>
                    
-                      <View style={styles.headerBar}>
+                      <View style={[styles.headerBar, {marginTop: STATUSBAR_HEIGHT}]}>
                       
                       <TouchableHighlight
                         onPress={() => {

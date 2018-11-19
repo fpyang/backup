@@ -332,6 +332,7 @@ class Submit extends Component{
                 this.setState({agreement: documentSnapshot.data().agreement});
                 this.setState({initAgreement: documentSnapshot.data().agreement?0:1})
                 this.setState({selectedTitle: documentSnapshot.data().title});
+                this.setState({createDate: documentSnapshot.data().createDate});
             });
          }
          
@@ -364,7 +365,8 @@ class Submit extends Component{
                                 group: this.autoAssignFunwordGroup(this.props.signIn.user),
                                 agreement: this.state.agreement,
                                 imageURL: uploadedFile.downloadURL,
-                                draftStatus: 'draft'
+                                draftStatus: 'draft',
+                                createDate: new Date()
                             }).then((value)=>{
                                 //this.haveSubmited();
                                 
@@ -394,7 +396,8 @@ class Submit extends Component{
                                     group: this.autoAssignFunwordGroup(this.props.signIn.user),
                                     agreement: this.state.agreement,
                                     imageURL: uploadedFile.downloadURL,
-                                    draftStatus: 'submitted'
+                                    draftStatus: 'submitted',
+                                    createDate: new Date()
                                 }).then((value)=>{
                                     //this.haveSubmited();
                                     let submittedGroup = this.autoAssignFunwordGroup(this.props.signIn.user);
@@ -460,7 +463,8 @@ class Submit extends Component{
                     author: this.props.signIn.user.uid,
                     draftStatus: 'draft',
                     group: this.state.autoGroup,
-                    imageURL: uploadedFile.downloadURL   
+                    imageURL: uploadedFile.downloadURL,
+                    createDate: new Date()
                   }).then(
                       ()=>{this.setState({submitted: true});}
                   );
@@ -479,7 +483,8 @@ class Submit extends Component{
                         author: this.props.signIn.user.uid,
                         draftStatus: 'submitted',
                         group: this.state.autoGroup,
-                        imageURL: this.state.image.uri  
+                        imageURL: this.state.image.uri,
+                        createDate: new Date()
                       }).then(
                           ()=>{
                               //this.haveSubmited();
@@ -511,7 +516,8 @@ class Submit extends Component{
                 author: this.props.signIn.user.uid,
                 draftStatus: 'submitted',
                 group: this.state.autoGroup,
-                imageURL: uploadedFile.downloadURL  
+                imageURL: uploadedFile.downloadURL,
+                createDate: new Date()
               }).then(
                   ()=>{
                       //this.haveSubmited();

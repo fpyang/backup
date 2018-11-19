@@ -76,6 +76,10 @@ class SettingsScreen extends Component{
         this.juniorHighSchools = require('../../json/junior_high_schools.json');
         this.seniorHighSchools = require('../../json/senior_high_schools.json');
         this.state = {
+            elementarySchools: null,
+            juniorHighSchools: null,
+            seniorHighSchools: null,
+            loading: true,
             name: this.props.signIn.user.name, //name    
             schoolCity: this.props.signIn.user.schoolCity,
             schoolType: this.props.signIn.user.schoolType,
@@ -105,7 +109,49 @@ class SettingsScreen extends Component{
         //this.setSchoolType(this.state.schoolType);
     }
     componentWillMount(){
-        //this.syncCurrentUserProfile();
+
+        fetch(('https://ucampus-89e65.firebaseapp.com/static/json/elementary_schools.json'), {
+            method: 'GET'}).then((response) => {
+              if (response.status === 200) {
+                response.json().then(json => {
+                                      this.setState(Object.assign({}, this.state, {'elementarySchools': json, 'loading': false}));
+                                      
+                                    });
+              } else {
+                //console.log(response.status);
+              }
+            })
+            .catch((error) => {
+              //console.log(error);
+            });
+        fetch(('https://ucampus-89e65.firebaseapp.com/static/json/senior_high_schools.json'), {
+            method: 'GET'}).then((response) => {
+                if (response.status === 200) {
+                response.json().then(json => {
+                                        this.setState(Object.assign({}, this.state, {'seniorHighSchools': json, 'loading': false}));
+                                        
+                                    });
+                } else {
+                //console.log(response.status);
+                }
+            })
+            .catch((error) => {
+                //console.log(error);
+            });
+        fetch(('https://ucampus-89e65.firebaseapp.com/static/json/junior_high_schools.json'), {
+            method: 'GET'}).then((response) => {
+                if (response.status === 200) {
+                response.json().then(json => {
+                                        this.setState(Object.assign({}, this.state, {'juniorHighSchools': json, 'loading': false}));
+                                        
+                                    });
+                } else {
+                //console.log(response.status);
+                }
+            })
+            .catch((error) => {
+                //console.log(error);
+            });
     }
     componentDidMound(){
         //this.syncCurrentUserProfile();     
@@ -196,7 +242,7 @@ class SettingsScreen extends Component{
     
         switch(schoolType){
           case '國小':
-            currentSchools = this.elementarySchools.schools.filter(
+            currentSchools = this.state.elementarySchools.schools.filter(
               (school)=>{
                 //console.log((school.city == schoolCity), school.city, schoolCity)
                 return school.city == schoolCity;
@@ -210,7 +256,7 @@ class SettingsScreen extends Component{
             );
             break;
           case '國中':
-            currentSchools = this.juniorHighSchools.schools.filter(
+            currentSchools = this.state.juniorHighSchools.schools.filter(
               (school)=>{
                 return school.city === schoolCity;
               }
@@ -223,7 +269,7 @@ class SettingsScreen extends Component{
             );
             break;
           case '高中職':
-            currentSchools = this.seniorHighSchools.schools.filter(
+            currentSchools = this.state.seniorHighSchools.schools.filter(
               (school)=>{
                 return school.city === schoolCity;
               }
@@ -371,7 +417,7 @@ class SettingsScreen extends Component{
 
         this.setCurrentSchoolsList(this.state.schoolType, schoolCity.schoolCity);
       
-        let reduceSchools = this.elementarySchools.schools.filter(
+        let reduceSchools = this.state.elementarySchools.schools.filter(
         (school)=>{
             return school.city === schoolCity.schoolCity;
         }

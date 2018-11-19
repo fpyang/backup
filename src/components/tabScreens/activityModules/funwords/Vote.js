@@ -157,20 +157,32 @@ class Vote extends Component{
     initVote(){
            
     }
+
     orderByHotness(){
+
+        //update this.state.work
+        let funword = firebase.firestore().collection('funword').orderBy('');
 
     }
 
     orderByTime(){
 
+        //update this.state.work
+        let funword = firebase.firestore().collection('funword');
+
     }
 
     orderInTime(){
 
+        //update this.state.work
+        let funword = firebase.firestore().collection('funword');
+
     }
+
     searching(){
         this.setState({searching: this.state.searchTerms});
     }
+
     filtering(name, schoolName){
         //this.state.searchTerms
         //TODO: search term preprocessing
@@ -377,7 +389,7 @@ class Vote extends Component{
                 
                 <ActionSheet
                 ref={o => this.ActionSheet = o}
-                title={'上傳你的作品'}
+                title={''}
                 options={['熱門', '最新', '隨機', '取消']}
                 cancelButtonIndex={3}
                 onPress={(index) => { 

@@ -9,7 +9,6 @@ import LLTextInput from '../activityModules/utilities/LLTextInput';
 import RegItem from './RegItem';
 import WeeblyWebView from '../activityModules/utilities/WeeblyWebView';
 
-
 const identationLeft = 20;
 const styles = {
     page: {
@@ -95,7 +94,11 @@ class UserProfile extends Component{
             serviceModalVisible: false,
             privacyModalVisible: false,
             agreement: null,
-            admissionFirstTimeAlert: true
+            admissionFirstTimeAlert: true,
+            loading: true,
+            elementarySchools: null,
+            seniorHighSchools: null,
+            juniorHighSchools: null
         }
         this.elementarySchools = require('../../../json/elementary_schools.json');
         this.juniorHighSchools = require('../../../json/junior_high_schools.json');
@@ -114,7 +117,52 @@ class UserProfile extends Component{
     }
     componentDidMount() {
         this.props.onRef(this)
-      }
+    }
+    componentWillMount(){
+
+        fetch(('https://ucampus-89e65.firebaseapp.com/static/json/elementary_schools.json'), {
+            method: 'GET'}).then((response) => {
+              if (response.status === 200) {
+                response.json().then(json => {
+                                      this.setState(Object.assign({}, this.state, {'elementarySchools': json, 'loading': false}));
+                                      
+                                    });
+              } else {
+                //console.log(response.status);
+              }
+            })
+            .catch((error) => {
+              //console.log(error);
+            });
+        fetch(('https://ucampus-89e65.firebaseapp.com/static/json/senior_high_schools.json'), {
+            method: 'GET'}).then((response) => {
+                if (response.status === 200) {
+                response.json().then(json => {
+                                        this.setState(Object.assign({}, this.state, {'seniorHighSchools': json, 'loading': false}));
+                                        
+                                    });
+                } else {
+                //console.log(response.status);
+                }
+            })
+            .catch((error) => {
+                //console.log(error);
+            });
+        fetch(('https://ucampus-89e65.firebaseapp.com/static/json/junior_high_schools.json'), {
+            method: 'GET'}).then((response) => {
+                if (response.status === 200) {
+                response.json().then(json => {
+                                        this.setState(Object.assign({}, this.state, {'juniorHighSchools': json, 'loading': false}));
+                                        
+                                    });
+                } else {
+                //console.log(response.status);
+                }
+            })
+            .catch((error) => {
+                //console.log(error);
+            });
+    }
     componentWillUnmount() {
        this.props.onRef(null)
     }  
@@ -142,7 +190,7 @@ class UserProfile extends Component{
     
         switch(schoolType){
           case '國小':
-            currentSchools = this.elementarySchools.schools.filter(
+            currentSchools = this.state.elementarySchools.schools.filter(
               (school)=>{
                 //console.log((school.city == schoolCity), school.city, schoolCity)
                 return school.city == schoolCity;
@@ -156,7 +204,7 @@ class UserProfile extends Component{
             );
             break;
           case '國中':
-            currentSchools = this.juniorHighSchools.schools.filter(
+            currentSchools = this.state.juniorHighSchools.schools.filter(
               (school)=>{
                 return school.city === schoolCity;
               }
@@ -169,7 +217,7 @@ class UserProfile extends Component{
             );
             break;
           case '高中職':
-            currentSchools = this.seniorHighSchools.schools.filter(
+            currentSchools = this.state.seniorHighSchools.schools.filter(
               (school)=>{
                 return school.city === schoolCity;
               }
@@ -226,7 +274,7 @@ class UserProfile extends Component{
             verifiedResult = false;
         }
 
-        if(this.state.agreement === null){
+        if(this.state.agreement === null || this.state.agreement === false){
             errorMsg += '請選擇是否同意隱私權條款 \n';
             verifiedResult = false;
         }
@@ -363,7 +411,7 @@ class UserProfile extends Component{
         }else{
         }
 
-        let reduceSchools = this.elementarySchools.schools.filter(
+        let reduceSchools = this.state.elementarySchools.schools.filter(
         (school)=>{
             return school.city === schoolCity.schoolCity;
         }

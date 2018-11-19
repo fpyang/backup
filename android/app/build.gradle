@@ -101,9 +101,9 @@ android {
         applicationId "com.uceUcampus"
         minSdkVersion 21
         targetSdkVersion 27
-        versionCode 31
+        versionCode 32
         multiDexEnabled true
-        versionName "2.11"
+        versionName "2.12"
         ndk {
             abiFilters "armeabi-v7a", "x86"
         }

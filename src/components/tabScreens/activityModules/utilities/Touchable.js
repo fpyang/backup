@@ -1,7 +1,7 @@
 import React ,{ Component } from 'react';
 import { TouchableOpacity } from 'react-native';
 //import * as _ from 'lodash';
-const debounceMillisecond = 1500;
+const debounceMillisecond = 2500;
 export default class Touchable extends Component {
 
 debouncePress = onPress => () => {
