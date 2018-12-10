@@ -10,6 +10,7 @@ import RegStage from './reducer_regStage';
 import FunwordState from './reducer_funwordState';
 import SignIn from './reducer_login';
 import Onboarding from './reducer_onboarding';
+import Articles from './reducer_articles';
 
 const appReducer = combineReducers({
     awardLevel: AwardLevel,
@@ -21,7 +22,8 @@ const appReducer = combineReducers({
     regStage: RegStage,
     funwordState: FunwordState,
     signIn: SignIn,
-    onboarding: Onboarding
+    onboarding: Onboarding,
+    articles: Articles
 });
 
 

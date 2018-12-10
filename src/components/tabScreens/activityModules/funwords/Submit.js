@@ -129,7 +129,21 @@ const styles = {
         justifyContent: 'center',
         alignItems: 'center',
         marginBottom: 5
-    }
+    },
+    notOpen: {
+        display: 'flex',
+        backgroundColor: 'white',
+        alignItems: 'center',
+        justification: 'center',
+        marginTop: 20,
+        width: width,
+        height: height
+      },
+      notOpenText: {
+        marginTop: height/2-50,
+        alignItems: 'center',
+        justification: 'center'
+      }
     
 }
 
@@ -178,7 +192,9 @@ class Submit extends Component{
             initAgreement: -1,
             documentId: null,
             value3Index: null,
-            modalVisible: false
+            modalVisible: false,
+            loading: true,
+            startYet: null
 
         }
         this.onTitleClickHandler = this.onTitleClickHandler.bind(this);
@@ -203,7 +219,25 @@ class Submit extends Component{
     }
     componentDidMount() {
     }
-    componentWillUnmount() {
+    componentWillMount(){
+
+        fetch(('https://ucampus-89e65.firebaseapp.com/static/json/configs.json'), {
+            method: 'GET'}).then((response) => {
+              if (response.status === 200) {
+                response.json().then(json => {
+                                      this.setState(Object.assign({}, this.state, {'configObjs': json, 'loading': false}));
+                                      let startDay = new Date(json.activities.funword.submitStartDate);
+                                        let today = new Date();
+                                        let startYet = (today > startDay);//FIXME: for test, production's today should be less than startDay
+                                        this.setState({startYet});
+                                    });
+              } else {
+                //console.log(response.status);
+              }
+            })
+            .catch((error) => {
+              //console.log(error);
+            });
     }
     showActionSheet(){
         this.ActionSheet.show();
@@ -847,6 +881,7 @@ class Submit extends Component{
         
         return(
             <View style={{flex: 1}}>
+            {!this.state.startYet &&<View style={{flex: 1}}>
             {(this.state.draftStatus==='submitted')&&(this.renderSubmittedPage())}
             {(this.state.draftStatus===null)&&(<View 
             style={{
@@ -931,6 +966,12 @@ class Submit extends Component{
                     />
                 
             </ScrollView>)}
+            </View>}
+            {this.state.startYet && <View style={styles.notOpen}>
+            <View style={styles.notOpenText}>
+            <Text> {(this.state.configObjs)?this.state.configObjs.activities.funword.prompt_end:'loading'} </Text>
+            </View>
+            </View>}
             </View>
         )
         

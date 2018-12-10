@@ -14,6 +14,7 @@ import {
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
 import ReduxPromise from 'redux-promise';
+import thunkMiddleware from 'redux-thunk';
 //import { ApolloClient } from 'apollo-client';
 //import { ApolloProvider } from 'react-apollo';
 import reducer from './src/reducers';
@@ -36,7 +37,7 @@ const instructions = Platform.select({
 */
 
 //const client = new ApolloClient();
-const createStoreWithMiddleware = applyMiddleware(ReduxPromise)(createStore);
+const createStoreWithMiddleware = applyMiddleware(ReduxPromise, thunkMiddleware)(createStore);
 const store = createStoreWithMiddleware(reducer);
 export default class App extends Component{
   render() {  

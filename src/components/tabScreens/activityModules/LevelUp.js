@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text } from 'react-native';
+import { View, ScrollView, Text } from 'react-native';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import DrawerLayout from 'react-native-drawer-layout';
@@ -11,6 +11,26 @@ class LevelUp extends Component{
     constructor(props){
         super(props);
         this.getLevelUpData = this.getLevelUpData.bind(this);
+        this.state = {
+            loading: true,
+            configObjs: []
+        }
+    }
+    componentWillMount(){
+
+        fetch(('http://test.educoco.com:5000/articlesbf'), {
+            method: 'GET'}).then((response) => {
+              if (response.status === 200) {
+                response.json().then(json => {
+                                      this.setState(Object.assign({}, this.state, {'configObjs': json.data, 'loading': false}));
+                                    });
+              } else {
+                //console.log(response.status);
+              }
+            })
+            .catch((error) => {
+              //console.log(error);
+            });
     }
     getLevelUpData(){
        return[
@@ -19,7 +39,7 @@ class LevelUp extends Component{
 
                 },
                 {
-                    title: '挑戰AI極限 Google要玩什麼'
+                    title: '挑戰Alf極限 Gigipu要玩什麼'
 
                 }
             ]
@@ -30,6 +50,19 @@ class LevelUp extends Component{
               <Text style={{margin: 10, fontSize: 15, textAlign: 'left'}}>I'm in the Drawer!</Text>
             </View>
           );
+
+          let container = [];
+          if(this.state.loading){
+   
+              container = <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}><Text>題目載入中...</Text></View>
+      
+          }else{
+              container = [];
+              { this.state.configObjs.map((article, index)=>{
+                  container.push(<LevelUpItem {...this.props} title={article.subject} key={index}/>)
+              })
+             }
+          }
         return(           
                 <DrawerLayout
                 drawerWidth={300}
@@ -45,14 +78,10 @@ class LevelUp extends Component{
                 keyboardDismissMode="on-drag"
                 statusBarBackgroundColor="blue"
                 renderNavigationView={() => navigationView}>
-                            <View>
+                            <ScrollView>
                                 <Text>{JSON.stringify(this.props.levelUpHamburgerOpen)}</Text>
-                            { this.getLevelUpData().map(
-                                (value, index) => {
-                                    return(<LevelUpItem {...this.props} title={value.title} key={index}/>)
-                                }
-                            ) }
-                            </View>
+                            {  container }
+                            </ScrollView>
                 </DrawerLayout>
 
 
@@ -68,7 +97,8 @@ function mapDispatchToProps(dispatch) {
   
 function mapStateToProps(state) {
     return {
-        levelUpHamburgerOpen: state.levelUpHamburgerOpen
+        levelUpHamburgerOpen: state.levelUpHamburgerOpen,
+        listOfArticles: state.listOfArticles
     };
   }
   

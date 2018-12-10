@@ -89,16 +89,18 @@ class LevelUpItem extends Component{
                     <Icon name='eye' size={14} color='gray' />110</Text>
                   </View>
                 </View>);
-        if(this.props.itemTitle){
+        if(this.props.title){
             content = (
-                  <View style={styles.itemTitleBox}>
-                    <View style={styles.itemTitleView} >
-                      <Text style={styles.itemTitle}>{this.props.itemTitle}</Text>
-                    </View>
-                    <View style={styles.itemTitleMetadata} >
-                    
-                    </View>
-                  </View>);
+                <View style={styles.itemTitleBox}>
+                <View style={styles.itemTitleView} >
+                  <Text style={styles.itemTitle}>{this.props.title}</Text> 
+                </View>
+                <View style={styles.itemTitleMetadata} >
+                  <Text style={styles.itemTitleMetadataDate}>2018/05/06.國際力</Text>
+                  <Text style={styles.itemTitleMetadataView}>
+                  <Icon name='eye' size={14} color='gray' />110</Text>
+                </View>
+              </View>);
         }
         return(
         <TouchableOpacity 

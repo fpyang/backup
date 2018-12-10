@@ -1,20 +1,34 @@
 import React, { Component } from 'react';
-import { View, Text, ScrollView, FlatList, TouchableOpacity, Dimensions, TextInput } from 'react-native';
+import { View, Text, ScrollView, 
+    Modal, FlatList, TouchableHighlight, 
+    Dimensions, Platform} from 'react-native';
+import {OptimizedFlatList} from 'react-native-optimized-flatlist';
+import { RecyclerListView, DataProvider, LayoutProvider } from "recyclerlistview";
 import ProgressBarAnimated from 'react-native-progress-bar-animated';
 import firebase from 'react-native-firebase';
+import AutoHeightImage from 'react-native-auto-height-image';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { connect } from 'react-redux';
 import ActionSheet from 'react-native-actionsheet';
 import LLTextInput from '../utilities/LLTextInput';
 
+
 import VoteItem from './VoteItem';
 const { width, height } = Dimensions.get('window');
+const cardWidth = width/2-12;
+const headerFontColor = '#2D82C6';
+let ITEM_HEIGHT = (width/2-12)*2+20;
 const styles = {
     posts: {
         backgroundColor: 'white',
-        flexDirection: 'row',
-        justifyContent: 'flex-start',
-        flexWrap: 'wrap'
+        flexDirection: 'column',
+        //justifyContent: 'flex-start',
+        //flexWrap: 'wrap'
+    },
+    image: {
+        backgroundColor: 'white',
+        width: cardWidth,
+        height: cardWidth 
     },
     submit: {
       backgroundColor: '#f7f7f7',
@@ -90,6 +104,15 @@ const styles = {
     },
     voteNormalFont: {
         lineHeight: 30
+    },
+    headerText: {
+        fontSize: 18,
+        color: headerFontColor
+    },
+    headerLeft: {
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center'      
     }
 }
 class Vote extends Component{
@@ -103,10 +126,12 @@ class Vote extends Component{
             todayVote: 0,
             searchTerms: '',
             searching: '',
-            loading: true,
             startYet: null,
             configObjs: null,
-            actionSheetIndex: -1
+            actionSheetIndex: -1,
+            modalVisible: false,
+            works: [],
+            bigImg: null
         }
         this.funword = firebase.firestore().collection('funword');
         this.votes = firebase.firestore().collection('votes');
@@ -122,6 +147,9 @@ class Vote extends Component{
         this.orderByHotness = this.orderByHotness.bind(this);
         this.orderByTime = this.orderByTime.bind(this)
         this.orderInTime = this.orderInTime.bind(this);
+        this.showBigPicture = this.showBigPicture.bind(this);
+        this.setModalVisible = this.setModalVisible.bind(this);
+        this.childItemClickEventHandler = this.childItemClickEventHandler.bind(this);
         
     }
     componentDidMount() {
@@ -205,6 +233,18 @@ class Vote extends Component{
         this.ActionSheet.show();
     }
 
+    showBigPicture(img){
+           return <AutoHeightImage width={width} source={img} />
+    }
+
+    setModalVisible(visible) {
+        this.setState({modalVisible: visible});
+    }
+
+    childItemClickEventHandler(imgURL){
+        this.setState({bigImg: imgURL}, ()=>{this.setModalVisible(true)});
+    }
+
     onVotesUpdate(querySnapshot){
         const votes = [];
         let myVotes = 0;
@@ -256,14 +296,14 @@ class Vote extends Component{
     onCollectionUpdate(querySnapshot){
         const works = [];
         querySnapshot.forEach((doc) => {
-            const { author, group, imageURL, title, draftStatus } = doc.data();
-            let name = '';
-            let schoolName = '';
+            const { author, group, imageURL, votes, title, draftStatus, name, schoolName, thumbnail, thumbnail_icon } = doc.data();
+            //let name = '';
+            //let schoolName = '';
             
             if(this.props.signIn.user.funwordGroup==null){
 
                 if((draftStatus==='submitted') && (group === this.autoAssignFunwordGroup(this.props.signIn.user))){ //drafts are invisible to users// (group === this.autoAssignFunwordGroup(this.props.signIn.user))
-                    this.users.where("uid", "==", author).get()
+                    /*this.users.where("uid", "==", author).get()
                                 .then(querySnapshot => {
                                     querySnapshot.forEach(documentSnapshot => {
                                         name = documentSnapshot.data().name,
@@ -291,14 +331,33 @@ class Vote extends Component{
                                             loading: false,
                                     });
                                     }
-                                );
+                                );*/
+                                works.push({
+                                    key: doc.id,
+                                    id: doc.id,
+                                    doc, // DocumentSnapshot
+                                    author,
+                                    name,
+                                    schoolName,
+                                    group,
+                                    imageURL,
+                                    votes,
+                                    thumbnail,
+                                    thumbnail_icon,
+                                    title,
+                                    draftStatus
+                                });
+                                this.setState({ 
+                                    works,
+                                    loading: false,
+                            });
                     
                 } 
 
             }else{
 
                 if((draftStatus==='submitted') && (group === this.props.signIn.user.funwordGroup)){ //drafts are invisible to users// (group === this.autoAssignFunwordGroup(this.props.signIn.user))
-                    this.users.where("uid", "==", author).get()
+                    /*this.users.where("uid", "==", author).get()
                                 .then(querySnapshot => {
                                     querySnapshot.forEach(documentSnapshot => {
                                         name = documentSnapshot.data().name,
@@ -326,7 +385,26 @@ class Vote extends Component{
                                             loading: false,
                                     });
                                     }
-                                );
+                                );*/
+                                works.push({
+                                    key: doc.id,
+                                    id: doc.id,
+                                    doc, // DocumentSnapshot
+                                    author,
+                                    name,
+                                    schoolName,
+                                    group,
+                                    imageURL,
+                                    votes,
+                                    thumbnail,
+                                    thumbnail_icon,
+                                    title,
+                                    draftStatus
+                                });
+                                this.setState({ 
+                                    works,
+                                    loading: false,
+                            });
                     
                 } 
 
@@ -386,6 +464,38 @@ class Vote extends Component{
     render(){
         return(
             <View>
+
+                <Modal
+                    animationType="slide"
+                    transparent={false}
+                    visible={this.state.modalVisible}
+                    onRequestClose={() => {
+                        alert('Modal has been closed.');
+                    }}>
+                    <View style={{marginTop: 22}}>
+                        <View>
+                        <TouchableHighlight
+                            onPress={() => {
+                            this.setModalVisible(false);
+                            }}>
+                            <View style={styles.headerLeft}>
+                                <Icon 
+                                name="angle-left" 
+                                size={30} 
+                                style={{marginRight: 5, marginLeft: 5}}
+                                color={headerFontColor}>
+                                </Icon>
+                                <Text style={styles.headerText}>返回</Text>
+                            </View>
+                        </TouchableHighlight>
+                        <ScrollView style={{marginTop: 30}}>
+                        
+                        {this.state.bigImg ? this.showBigPicture({uri: this.state.bigImg}) : <View style={styles.image}></View>}
+                        </ScrollView>
+                        
+                        </View>
+                    </View>
+                </Modal>
                 
                 <ActionSheet
                 ref={o => this.ActionSheet = o}
@@ -433,21 +543,41 @@ class Vote extends Component{
              </View>   
                     
             </View>
-                <ScrollView>
-                <FlatList
-                    style={{flex: 1, marginBottom: 130}}
+                <View>
+                {(Platform.OS === 'ios')?<FlatList
+                    style={{flex: 1, marginBottom: 230}}
                     contentContainerStyle={styles.posts}
+                    numColumns={2} 
+                    columnWrapperStyle={{
+                        flex:1,
+                        flexDirection:'row',
+                        flexWrap:'wrap',
+                    }}
                     data={this.state.works}
+                    keyExtractor={(item, index) => index}
+                    removeClippedSubviews={Platform.OS === 'ios' ? false : true}
+                    maxToRenderPerBatch={20}
+                    updateCellsBatchingPeriod={200}
+                    windowSize={21}
+                    getItemLayout={(data, index) => (
+                        {length: ITEM_HEIGHT, offset: ITEM_HEIGHT * index, index}
+                    )}
+                    legacyImplementation={false}
                     renderItem={({ item }) => {
                             //if(this.filtering(item.name, item.schoolName)){
-                                return <VoteItem {...item} searchTerms={this.state.searching}/>; 
-                           // }else{
-                           //     return null;
-                           // }
-                                 
+                                return (<VoteItem 
+                                {...item} 
+                                searchTerms={this.state.searching}
+                                onClickImg={this.childItemClickEventHandler}
+                                />); 
+                            // }else{
+                            //     return null;
+                            // }
+                            // ios only: initialNumToRender={400}
+                                    
                         }}
-                    />
-                </ScrollView>
+                    />:<Text>android sucks</Text>}
+                </View>
 
             </View>}
             {!this.state.startYet && <View style={styles.notOpen}>
@@ -491,3 +621,35 @@ function mapStateToProps(state) {
   
   //export default connect(mapStateToProps, mapDispatchToProps)(Poll);
   export default connect(mapStateToProps)(Vote);
+
+  /*
+
+  <FlatList
+    style={{flex: 1, marginBottom: 230}}
+    contentContainerStyle={styles.posts}
+    data={this.state.works}
+    keyExtractor={(item, index) => index}
+    
+    removeClippedSubviews={false}
+    getItemLayout={(data, index) => (
+        {length: ITEM_HEIGHT, offset: ITEM_HEIGHT * index, index}
+    )}
+    renderItem={({ item }) => {
+            //if(this.filtering(item.name, item.schoolName)){
+                return <VoteItem {...item} searchTerms={this.state.searching}/>; 
+            // }else{
+            //     return null;
+            // }
+            // ios only: initialNumToRender={400}
+                    
+        }}
+    />
+
+
+    getItemLayout={(data, index) => (
+                                            {length: ITEM_HEIGHT, offset: ITEM_HEIGHT * Math.floor(index/2), index}
+                                        )}
+
+
+    
+*/

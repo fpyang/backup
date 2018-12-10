@@ -1,11 +1,13 @@
-import React, { Component } from 'react';
+import React, { Component, PureComponent } from 'react';
 import { View, Text, Dimensions, Image, TouchableOpacity, Alert, ScrollView, Modal, TouchableHighlight } from 'react-native';
 import firebase from 'react-native-firebase';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import AutoHeightImage from 'react-native-auto-height-image';
+//import AutoHeightImage from 'react-native-auto-height-image';
+//import { CachedImage } from 'react-native-cached-image';
 import { saveCurrentProfile } from '../../../../actions/index';
+import TouchableSec from '../utilities/TouchableSec';
 
 const { height, width } = Dimensions.get('window');
 const cardWidth = width/2-12;
@@ -86,8 +88,8 @@ class VoteItem extends Component{
         this.votes = firebase.firestore().collection('votes');
         this.onCollectionUpdate = this.onCollectionUpdate.bind(this);
         this.initVote = this.initVote.bind(this);
-        this.setModalVisible = this.setModalVisible.bind(this);
-        this.renderBigImage = this.renderBigImage.bind(this);
+        //this.setModalVisible = this.setModalVisible.bind(this);
+        //this.renderBigImage = this.renderBigImage.bind(this);
         this.autoAssignFunwordGroup = this.autoAssignFunwordGroup.bind(this);
         
         this.state = {
@@ -128,6 +130,12 @@ class VoteItem extends Component{
             loading: false,
         });
     }
+    /* 
+     shouldComponentUpdate(nextProps, nextState) {
+        return nextProps.votes != this.props.votes;
+    }*/
+
+    /*
     setModalVisible(visible) {
         this.setState({modalVisible: visible});
     }
@@ -135,6 +143,7 @@ class VoteItem extends Component{
     renderBigImage(image) {
         return <AutoHeightImage width={width} source={image} />
     }
+    */
    
     initVote(){
         let todayDate = new Date();
@@ -162,7 +171,7 @@ class VoteItem extends Component{
     }
     getUpdatedAuthorData(){
         // Create a query against the collection
-        this.users.where("uid", "==", this.props.author).get()
+        /*this.users.where("uid", "==", this.props.author).get()
           .then(querySnapshot => {
             querySnapshot.forEach(documentSnapshot => {
                 this.setState({
@@ -170,7 +179,7 @@ class VoteItem extends Component{
                     schoolName: documentSnapshot.data().schoolName
                 });
             });
-          });
+          });*/
     }
     autoAssignFunwordGroup(user){
 
@@ -328,62 +337,40 @@ class VoteItem extends Component{
     }
     //TODO: responsive to determine the # of cards in a row
     //Test the threshold for smallest size of a card
+    /*
+    //Original anti-pattern, dynamic caculation of votes:
+    {this.state.votes?this.state.votes.filter((value)=>{
+                        return(value.target == this.props.id);
+                    }).length.toString()+'票': '計算中...'}
+    */
     render(){
             return(
                 <View>
-                    <Modal
-                    animationType="slide"
-                    transparent={false}
-                    visible={this.state.modalVisible}
-                    onRequestClose={() => {
-                        alert('Modal has been closed.');
-                    }}>
-                    <View style={{marginTop: 22}}>
-                        <View>
-                        <TouchableHighlight
-                            onPress={() => {
-                            this.setModalVisible(!this.state.modalVisible);
-                            }}>
-                            <View style={styles.headerLeft}>
-                                <Icon 
-                                name="angle-left" 
-                                size={30} 
-                                style={{marginRight: 5, marginLeft: 5}}
-                                color={headerFontColor}>
-                                </Icon>
-                                <Text style={styles.headerText}>返回</Text>
-                            </View>
-                        </TouchableHighlight>
-                        <ScrollView style={{marginTop: 10}}>
-                        {this.props.imageURL ? this.renderBigImage({uri: this.props.imageURL}) : <View style={styles.image}></View>}
-                        </ScrollView>
-                        
-                        </View>
-                    </View>
-                </Modal>
+                    
                 {this.state.voteItemVisible && <View style={styles.card}>  
-                <TouchableOpacity onPress={()=>this.setModalVisible(true)}>        
-                <Image style={{width: cardWidth, height: cardWidth, resizeMode: 'contain'}} source={{uri: this.props.imageURL}} />
+                <TouchableOpacity onPress={()=>{this.props.onClickImg(this.props.thumbnail)
+                }}>        
+                <Image style={{width: cardWidth, height: cardWidth, resizeMethod: 'resize', resizeMode: 'contain'}} 
+                           source={{uri: this.props.thumbnail_icon}}
+                            />
                 </TouchableOpacity>
                 <View style={styles.metadata}>
                 <View style={styles.title}>
                     <Text>{this.props.title}</Text>
                 </View>
                 <View style={styles.name}>
-                    <Text>{this.state.name}</Text>
+                    <Text>{this.props.name}</Text>
                 </View>
                 <View style={styles.school}>
-                    <Text>{this.state.schoolName}</Text>
+                    <Text>{this.props.schoolName}</Text>
                 </View>
                 </View>
                 <View style={styles.votes}>
-                    <Text> {this.state.votes?this.state.votes.filter((value)=>{
-                        return(value.target == this.props.id);
-                    }).length.toString()+'票': '計算中...'}  </Text>
+                    <Text> {this.props.votes} 票  </Text>
                 </View>
 
-                <TouchableOpacity 
-                    
+                <TouchableSec
+                    debounceMS={5000}
                     style={[styles.voteButton, (this.state.todayVote)?styles.haveVoted:styles.notVotedYet]}
                     onPress={this.vote}
                 >
@@ -391,7 +378,7 @@ class VoteItem extends Component{
                     {(this.state.todayVote)?'收回':'投票'}
                     </Text>
                     
-                </TouchableOpacity>
+                </TouchableSec>
             </View>}
             </View>
                 
@@ -413,4 +400,13 @@ function mapStateToProps(state) {
   
   //export default connect(mapStateToProps, mapDispatchToProps)(Poll);
   export default connect(mapStateToProps, mapDispatchToProps)(VoteItem);
+
+  /*
+<FastImage style={{width: cardWidth, height: cardWidth, resizeMode: 'contain'}} 
+                           source={{uri: this.props.thumbnail_icon, priority: FastImage.priority.normal}}
+                           resizeMode={FastImage.resizeMode.contain} />
+
+
+
+  */
 

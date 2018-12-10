@@ -10,10 +10,12 @@
       android:label="@string/app_name"
       android:icon="@mipmap/ic_launcher"
       android:allowBackup="false"
+      android:largeHeap="true"
       android:theme="@style/AppTheme">
       <activity
         android:name="com.uceUcampus.MainActivity"
         android:label="@string/app_name"
+        android:screenOrientation="portrait"
         android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
         android:windowSoftInputMode="adjustResize">
         <intent-filter>

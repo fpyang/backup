@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { View, Text } from 'react-native';
+import { ScrollView, Text } from 'react-native';
 import { bindActionCreators } from 'redux';
 import { setLevelUpHamburgerState } from '../../../../actions/index';
 import LevelUpRankingItem from './LevelUpRankingItem';
@@ -55,13 +55,13 @@ class LevelUpRanking extends Component{
     }
     render(){
         return (
-        <View> 
+        <ScrollView> 
         {this.getRankingList().map(
             function(value, index){
                 return (<LevelUpRankingItem {...value} key={index} rank={index+1} />)
             }
         )}    
-        </View>
+        </ScrollView>
         )
     }
 
